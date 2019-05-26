@@ -1,7 +1,8 @@
 ---
 title: "HexoからHugoに移行する"
 date: 2019-05-26T16:09:06+09:00
-draft: false
+slug: "hugo-basics"
+draft: true
 ---
 
 Hexo から Hugo に移行する時のメモ。
@@ -126,8 +127,6 @@ Use "hugo [command] --help" for more information about a command.
 
 ```bash
 $ cd themes
-$ git clone https://github.com/Vimux/mainroad themes/mainroad
-
 git submodule add https://github.com/Vimux/mainroad themes/mainroad
 ```
 
@@ -141,14 +140,29 @@ git submodule add https://github.com/Vimux/mainroad themes/mainroad
 
 ## 記事の生成と記載
 
-以下のコマンドで記事を作成する。
+記事は `hugo new <content配下のディレクトリ>/タイトル.md` コマンドで作成する。
 
 ```bash
-$ hugo new posts/タイトル.md
-/path/to/workspace/tech-blog-hugo/content/posts/タイトル.md created
+$ hugo new blog/HexoからHugoに移行する.md
+/path/to/workspace/tech-blog-hugo/content/blog/HexoからHugoに移行する.md created
 ```
 
-上記の Markdown に記事を書く。
+記事へのパスは `content/` ディレクトリ配下の構造と同じになる。  
+上記だと `[baseURL]/blog/HexoからHugoに移行する/` が記事へのパス。  
+ファイル名がパスになるのがイヤな場合は、各記事で `slug` を設定すると変更できる。
+
+```
+---
+title: "HexoからHugoに移行する"
+date: yyyy-MM-dd...
+slug: "hugo-basics"
+draft: true
+---
+
+Hexo から Hugo に移行する時のメモ。
+```
+
+上記の `slug` 設定だと記事へのパスは `[baseURL]/blog/hugo-basics/` になる。
 
 ## HTML の生成
 
