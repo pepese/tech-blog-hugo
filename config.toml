@@ -1,0 +1,12 @@
+
+DefaultContentLanguage = "ja"
+languageCode = "ja-JP"
+
+baseURL = "https://pepese.github.io/"
+title = "ぺーぺーSEのテックブログ"
+theme = "mainroad"
+
+[[menu.header]]
+  name = "Home"
+  weight = 1
+  url = "/"
