@@ -2,6 +2,8 @@
 title: "HexoからHugoに移行する"
 date: 2019-05-26T16:09:06+09:00
 slug: "hugo-basics"
+tags:
+- hugo
 draft: true
 ---
 
@@ -10,6 +12,8 @@ Hexo から Hugo に移行する時のメモ。
 - Hugo 環境構築
 - 記事の作成
 - Tips
+
+<!--more-->
 
 # Hugo 環境構築
 
@@ -51,75 +55,7 @@ $ echo /public > .gitignore
 
 # 記事の作成
 
-コマンド一覧は以下。
-
-```bash
-$ hugo help
-hugo is the main command, used to build your Hugo site.
-
-Hugo is a Fast and Flexible Static Site Generator
-built with love by spf13 and friends in Go.
-
-Complete documentation is available at http://gohugo.io/.
-
-Usage:
-  hugo [flags]
-  hugo [command]
-
-Available Commands:
-  check       Contains some verification checks
-  config      Print the site configuration
-  convert     Convert your content to different formats
-  env         Print Hugo version and environment info
-  gen         A collection of several useful generators.
-  help        Help about any command
-  import      Import your site from others.
-  list        Listing out various types of content
-  new         Create new content for your site
-  server      A high performance webserver
-  version     Print the version number of Hugo
-
-Flags:
-  -b, --baseURL string         hostname (and path) to the root, e.g. http://spf13.com/
-  -D, --buildDrafts            include content marked as draft
-  -E, --buildExpired           include expired content
-  -F, --buildFuture            include content with publishdate in the future
-      --cacheDir string        filesystem path to cache directory. Defaults: $TMPDIR/hugo_cache/
-      --cleanDestinationDir    remove files from destination not found in static directories
-      --config string          config file (default is path/config.yaml|json|toml)
-      --configDir string       config dir (default "config")
-  -c, --contentDir string      filesystem path to content directory
-      --debug                  debug output
-  -d, --destination string     filesystem path to write files to
-      --disableKinds strings   disable different kind of pages (home, RSS etc.)
-      --enableGitInfo          add Git revision, date and author info to the pages
-  -e, --environment string     build environment
-      --forceSyncStatic        copy all files when static is changed.
-      --gc                     enable to run some cleanup tasks (remove unused cache files) after the build
-  -h, --help                   help for hugo
-      --i18n-warnings          print missing translations
-      --ignoreCache            ignores the cache directory
-  -l, --layoutDir string       filesystem path to layout directory
-      --log                    enable Logging
-      --logFile string         log File path (if set, logging enabled automatically)
-      --minify                 minify any supported output format (HTML, XML etc.)
-      --noChmod                don't sync permission mode of files
-      --noTimes                don't sync modification time of files
-      --path-warnings          print warnings on duplicate target paths etc.
-      --quiet                  build in quiet mode
-      --renderToMemory         render to memory (only useful for benchmark testing)
-  -s, --source string          filesystem path to read files relative from
-      --templateMetrics        display metrics about template executions
-      --templateMetricsHints   calculate some improvement hints when combined with --templateMetrics
-  -t, --theme strings          themes to use (located in /themes/THEMENAME/)
-      --themesDir string       filesystem path to themes directory
-      --trace file             write trace to file (not useful in general)
-  -v, --verbose                verbose output
-      --verboseLog             verbose logging
-  -w, --watch                  watch filesystem for changes and recreate as needed
-
-Use "hugo [command] --help" for more information about a command.
-```
+コマンドは `hugo -h` あるいは `hugo [command] -h` で確認できる。
 
 ## テーマの設定
 
@@ -136,6 +72,35 @@ git submodule add https://github.com/Vimux/mainroad themes/mainroad
 設定はテーマによってクセがあるので、テーマの github をよく見ること。
 
 ```
+
+DefaultContentLanguage = "ja"
+languageCode = "ja-JP"
+
+baseURL = "https://pepese.github.io/"
+title = "ぺーぺーSEのテックブログ"
+theme = "mainroad"
+enableRobotsTXT = true
+googleAnalytics = "xxxx"
+
+[Params]
+  description = "備忘録用メモサイト"
+  twitter_cards = true
+  readmore = true
+
+[Params.sidebar]
+  home = "right" # Configure layout for home page
+  list = "left"  # Configure layout for list pages
+  single = true # Configure layout for single pages
+  # Enable widgets in given order
+  widgets = ["social", "recent", "taglist"]
+
+[Params.widgets]
+  recent_num = 5 # Set the number of articles in the "Recent articles" widget
+  tags_counter = false # Enable counter for each tag in "Tags" widget (disabled by default)
+
+[Params.widgets.social]
+  twitter = "xxxx"
+  github = "xxxx"
 ```
 
 ## 記事の生成と記載
@@ -149,23 +114,124 @@ $ hugo new blog/HexoからHugoに移行する.md
 
 記事へのパスは `content/` ディレクトリ配下の構造と同じになる。  
 上記だと `[baseURL]/blog/HexoからHugoに移行する/` が記事へのパス。  
-ファイル名がパスになるのがイヤな場合は、各記事で `slug` を設定すると変更できる。
+ファイル名がパスになるのがイヤな場合は、各記事で `slug` を設定すると変更できる。  
+また、まだ作成中の記事は `draft` を `true` にする。
 
 ```
 ---
 title: "HexoからHugoに移行する"
 date: yyyy-MM-dd...
 slug: "hugo-basics"
+tags:
+- hugo
 draft: true
 ---
 
 Hexo から Hugo に移行する時のメモ。
+
+<!--more-->
 ```
 
-上記の `slug` 設定だと記事へのパスは `[baseURL]/blog/hugo-basics/` になる。
+上記の `slug` 設定だと記事へのパスは `[baseURL]/blog/hugo-basics/` になる。  
+また、記事生成時の雛形は `archetypes/default.md` となっており、 `<!--more-->` （ READ More ： 続きを読む の境界）など好みの設定を入れておくとよい。
 
-## HTML の生成
+## ローカル実行
+
+`hugo server` コマンドでローカル実行できる。
+
+```bash
+$ hugo server -D
+```
+
+`-D` オプションを付与することで、ドラフト版の記事もビルド・確認できる。
 
 # Tips
 
-ああ。
+## Github Pagesへの公開
+
+公開用コンテンツが生成された `public/` を普通に Github Pages に対応したリポジトリに push する。
+
+```bash
+$ hugo
+$ cd public/
+$ git init
+$ git remote add origin https://pepese@github.com/pepese/pepese.github.io.git
+$ git add --all
+$ git commit -m "update"
+$ git push origin master
+```
+
+`branch` 作るとかは好みで。
+
+## sitemap.xml の作成
+
+デフォで作成されてる。
+
+## robots.txt の作成
+
+デフォで作成されてるが、自分で変種したい時は以下。
+
+- `config.toml` の設定で `enableRobotsTXT = true` とする
+- `/layouts/robots.txt` に雛形を準備する
+
+```:robots.txt
+User-agent: *
+Disallow : /img/
+Disallow : /css/
+Disallow : /js/
+Sitemap : {{ $.Site.BaseURL }}sitemap.xml
+```
+
+## 404ページの作成
+
+デフォで作成されてる。
+
+## Google Adsenseの設置
+
+## Google Analyticsの設置
+
+`config.toml` に以下を設定するだけ。
+
+```
+googleAnalytics = "UA-xxxxxxxx-x"
+```
+
+## Amazonアソシエイトの設置
+
+## Twitterの設定
+
+### Twitter Cards
+
+### フォロー・シェアボタンの設置
+
+## 画像の配置
+
+## RSS Feedの設置
+
+## OGPの設定
+
+## URLのクロールとインデックス登録を検索エンジンにリクエストする
+
+- Google（Yahoo）
+    - Googleアカウントを取得してGoogle Search Consoleの[Fetch as Google](https://www.google.com/webmasters/tools/googlebot-fetch)からリクエストする。
+- [bing](https://www.bing.com/toolbox/submit-site-url)
+
+## 数式を表示できるようにする
+
+## Gist-it で Github のソースコード貼り付け
+
+以下のようにスクリプトを貼り付ける。
+
+```html
+<script src="https://gist-it.appspot.com/github/[Github Account]/[Repository]/blob/[branch]/[path-to-file]?footer=0"></script>
+```
+
+例えば以下。
+
+```html
+<script src="https://gist-it.appspot.com/github/pepese/js-sample/blob/master/express-sample/app/controllers/get_index.js?footer=0"></script>
+```
+
+以下のように表示される。
+
+<script src="https://gist-it.appspot.com/github/pepese/js-sample/blob/master/express-sample/app/controllers/get_index.js?footer=0"></script>

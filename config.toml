@@ -27,3 +27,8 @@ googleAnalytics = "UA-42388425-3"
 [Params.widgets.social]
   twitter = "PeePeeSE"
   github = "pepese"
+
+[taxonomies]
+	tag = "tags"
+	category = "categories"
+	archive = "archives"
