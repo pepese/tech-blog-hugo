@@ -9,7 +9,7 @@ enableRobotsTXT = true
 googleAnalytics = "UA-42388425-3"
 
 [Params]
-  description = "備忘録用メモサイト"
+  description = "ぺーぺーSEがプログラミング（Go、Java、JavaScript、Python、Ruby）、クラウド（AWS）、Web構築などのメモを残すサイト。"
   twitter_cards = true
   readmore = true
 
@@ -25,7 +25,7 @@ googleAnalytics = "UA-42388425-3"
   tags_counter = false # Enable counter for each tag in "Tags" widget (disabled by default)
 
 [Params.widgets.social]
-  twitter = "PeePeeSE"
+  twitter = "@PeePeeSE"
   github = "pepese"
 
 [taxonomies]

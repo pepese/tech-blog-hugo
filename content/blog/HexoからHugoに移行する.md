@@ -188,6 +188,33 @@ Sitemap : {{ $.Site.BaseURL }}sitemap.xml
 
 ## Google Adsenseの設置
 
+ポイントは、 **取得したテーマを直接編集不要** ということ。  
+Hugo では 同名のファイルであれば、 テーマのレイアウト（ `themes/[テーマ名]/layouts` ）より独自のレイアウト（ `layouts/` ）が優先される。  
+そのため、ヘッダ、フッタ、サイドバーなどアドを差し込みたい部品をそれぞれ独自に作成する。
+
+```bash
+$ mkdir layouts/partials
+$ touch layouts/partials/header.html
+$ touch layouts/partials/footer.html
+$ touch layouts/partials/sidebar.html
+```
+
+上記のファイルについて、利用しているテーマから同名のファイルの中身をコピペして好きな内容を書き加えればカスタマイズできる。  
+以下のようなアドを上記のファイルに適宜差し込む。
+
+```html
+<!-- ad start -->
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="xxxx"
+     data-ad-slot="xxxx"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<!-- ad end -->
+```
+
 ## Google Analyticsの設置
 
 `config.toml` に以下を設定するだけ。
@@ -198,13 +225,73 @@ googleAnalytics = "UA-xxxxxxxx-x"
 
 ## Amazonアソシエイトの設置
 
+やり方は Google Adsense の時と同様で、以下のようなアドを `layouts/` 配下のファイルに適宜差し込む。
+
+```html
+<!-- ad start -->
+<!-- Amazon -->
+<script type="text/javascript"><!--
+amazon_ad_tag = "xxxxxxxx"; amazon_ad_width = "160"; amazon_ad_height = "600"; amazon_ad_logo = "hide";//--></script>
+<script type="text/javascript" src="http://ir-jp.amazon-adsystem.com/s/ads.js"></script>
+<!-- ad end -->
+```
+
 ## Twitterの設定
 
 ### Twitter Cards
 
+`config.toml` ファイルに以下の設定を追加する。
+
+```
+[Params]
+  description = "ぺーぺーSEがプログラミング（Go、Java、JavaScript、Python、Ruby）、クラウド（AWS）、Web構築などのメモを残すサイト。"
+  twitter_cards = true
+
+[Params.widgets.social]
+  twitter = "@PeePeeSE"
+```
+
+これでheadタグ内に以下のメタが追加される。（所謂 **Twitter Cards**）
+
+```html
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ぺーぺーSEのテックブログ">
+<meta name="twitter:description" content="ぺーぺーSEがプログラミング（Java、JavaScript、Python、Ruby）、クラウド（AWS）、Web構築などのメモを残すサイト。">
+<meta name="twitter:creator" content="@PeePeeSE">
+```
+
 ### フォロー・シェアボタンの設置
 
+これまた やり方は Google Adsense の時と同様。  
+以下のようなフォローボタンを `layouts/` 配下のファイルに適宜差し込む。
+
+```html
+<a href="https://twitter.com/PeePeeSE" class="twitter-follow-button" data-show-count="false">Follow @PeePeeSE</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+```
+
+以下のようなシェアボタンを `layouts/` 配下のファイルに適宜差し込む。
+
+```html
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="PeePeeSE">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+```
+
 ## 画像の配置
+
+`static/` 配下に `img` というディレクトリを作ってそこに画像を保存する。  
+記事から参照する場合は、 Markdown で
+
+```
+![This is a image](/img/img01.png)
+```
+
+というふうに記載すると HTML で
+
+```html
+<p><img src="/img/img01.png" alt="This is a image" /></p>
+```
+
+のように展開される。  
+画像サイズなど指定したい場合は Markdown の中に直接 HTML タグを書いてしまう。
 
 ## RSS Feedの設置
 

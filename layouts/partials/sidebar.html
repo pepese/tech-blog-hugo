@@ -1,0 +1,39 @@
+{{- $sidebar := false }}
+{{- if eq .Kind "home" -}}
+	{{ $sidebar = (default .Site.Params.sidebar.home .Params.sidebar) }}
+{{- else if eq .Kind "page" -}}
+	{{ $sidebar = (default .Site.Params.sidebar.single .Params.sidebar) }}
+{{- else -}}
+	{{ $sidebar = (default .Site.Params.sidebar.list .Params.sidebar) }}
+{{ end }}
+
+{{- if $sidebar -}}
+<aside class="sidebar{{ if eq $sidebar "left" }} sidebar--left{{ end }}">
+	<!-- ad start -->
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<!-- techblog_side -->
+	<ins class="adsbygoogle"
+			style="display:inline-block;width:300px;height:250px"
+			data-ad-client="ca-pub-0116602540349648"
+			data-ad-slot="7455097821"></ins>
+	<script>
+	(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+	<!-- ad end -->
+{{- $root := . }}
+{{- with (default .Site.Params.sidebar.widgets .Params.widgets) -}}
+	{{- range $widget := . }}
+		{{- $p := printf "widgets/%s.html" $widget }}
+		{{- partial $p $root }}
+	{{- end }}
+{{- else }}
+	<p class="sidebar__warning"><strong>{{ T "sidebar_warning" }}:</strong><br>{{ T "sidebar_recommendation" }}</p>
+{{- end }}
+	<!-- ad start -->
+	<!-- Amazon -->
+	<script type="text/javascript"><!--
+		amazon_ad_tag = "tanakakns-22"; amazon_ad_width = "160"; amazon_ad_height = "600"; amazon_ad_logo = "hide";//--></script>
+		<script type="text/javascript" src="https://ir-jp.amazon-adsystem.com/s/ads.js"></script>
+	<!-- ad end -->
+</aside>
+{{- end }}
