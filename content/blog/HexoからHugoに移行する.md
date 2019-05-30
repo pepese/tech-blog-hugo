@@ -221,12 +221,13 @@ archives:
 <h3>アーカイブ：{{ .Title }}</h3>
 </pre>
 {{ range .Data.Pages }}
-<li>
+<li style="list-style:none">
     <div class="date">{{ .Date.Format "2006.01.02 (Mon)" }}</div>
     <h3 class="list__title post__title ">
         <a href="{{ .Permalink }}">{{ .Title }}</a>
     </h3>
 </li>
+<br />
 {{ end }}
 {{ end }}
 ```

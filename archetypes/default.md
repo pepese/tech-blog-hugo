@@ -1,7 +1,7 @@
 ---
 title: "{{ replace .Name "-" " " | title }}"
 date: {{ .Date }}
-slog: ""
+slug: ""
 tags:
 - tag_name
 draft: true
