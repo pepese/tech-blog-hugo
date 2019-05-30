@@ -6,6 +6,8 @@ tags:
 - kubernetes
 - helm
 draft: true
+archives:
+- 2019/05
 ---
 
 今更ながら [Helm](https://github.com/helm/helm) に入門する。（ [公式ドキュメント](https://helm.sh/docs/) ）

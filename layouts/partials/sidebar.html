@@ -29,6 +29,13 @@
 {{- else }}
 	<p class="sidebar__warning"><strong>{{ T "sidebar_warning" }}:</strong><br>{{ T "sidebar_recommendation" }}</p>
 {{- end }}
+	<!-- archives start -->
+	<ul>
+		{{ range $name, $items := .Site.Taxonomies.archives }}
+			<li><a href="{{ $.Site.BaseURL }}archives/{{ $name | urlize | lower }}">{{ $name }} ({{ .Count }})</a></li>
+		{{ end }}
+	</ul>
+	<!-- archives end -->
 	<!-- ad start -->
 	<!-- Amazon -->
 	<script type="text/javascript"><!--

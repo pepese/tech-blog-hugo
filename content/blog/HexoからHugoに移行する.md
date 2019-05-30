@@ -4,14 +4,14 @@ date: 2019-05-26T16:09:06+09:00
 slug: "hugo-basics"
 tags:
 - hugo
-draft: true
+draft: false
 archives:
-- 2019
 - 2019/05
-- 2019/05/26
 ---
 
-Hexo から Hugo に移行する時のメモ。
+Hexo から Hugo に移行する時のメモ。  
+タイトルは「移行する」だが、「移行」の方法については書いてない。  
+各記事 Markdown のフロント（ヘッダ？）部分の yaml が違うだけなので量が多ければスクリプトなどへ変換されたし。（人によって設定も違うし）
 
 - Hugo 環境構築
 - 記事の作成
@@ -149,6 +149,88 @@ $ hugo server -D
 
 # Tips
 
+## タグをつける
+
+タグ Hugo でいうところの **Taxonomy** というものの一部。  
+`config.toml` に以下を設定する。
+
+```
+[taxonomies]
+	tag = "tags"
+```
+
+各記事で以下のように `tags` を設定する。
+
+```yaml
+---
+title: "HexoからHugoに移行する"
+date: 2019-05-26T16:09:06+09:00
+slug: "hugo-basics"
+tags:
+- hugo
+draft: true
+---
+```
+
+上記では `hugo` というタグが作成される。  
+リスト形式で複数指定することも可能。
+
+## アーカイブページの作成
+
+アーカイブは **Taxonomy** の一部。
+`config.toml` に以下を設定する。
+
+```
+[taxonomies]
+	archive = "archives"
+```
+
+各記事で以下のように `archives` を設定する。
+
+```yaml
+---
+title: "HexoからHugoに移行する"
+date: 2019-05-26T16:09:06+09:00
+slug: "hugo-basics"
+tags:
+- hugo
+draft: true
+archives:
+- 2019/05
+---
+```
+
+上記で `2019/05` のアーカイブが作成される。  
+`2019` や `2019/05/26` といった単位のアーカイブを複数作成することも可能。  
+また、以下のようなタグをサイドバーなど任意の場所に作成してアーカイブページへのリングを設置する。
+
+```html
+<!-- archives start -->
+<ul>
+  {{ range $name, $items := .Site.Taxonomies.archives }}
+    <li><a href="{{ $.Site.BaseURL }}archives/{{ $name | urlize | lower }}">{{ $name }} ({{ .Count }})</a></li>
+  {{ end }}
+</ul>
+<!-- archives end -->
+```
+
+さらに `layouts/taxonomy/archive.html` としてアーカイブページ自体も作成する。
+
+```html
+{{ define "main" }}
+<h3>アーカイブ：{{ .Title }}</h3>
+</pre>
+{{ range .Data.Pages }}
+<li>
+    <div class="date">{{ .Date.Format "2006.01.02 (Mon)" }}</div>
+    <h3 class="list__title post__title ">
+        <a href="{{ .Permalink }}">{{ .Title }}</a>
+    </h3>
+</li>
+{{ end }}
+{{ end }}
+```
+
 ## Github Pagesへの公開
 
 公開用コンテンツが生成された `public/` を普通に Github Pages に対応したリポジトリに push する。
@@ -164,13 +246,6 @@ $ git push origin master
 ```
 
 `branch` 作るとかは好みで。
-
-## アーカイブページの作成
-
-実施中。。。
-
-- https://backport.net/blog/2017/09/08/hugo_monthly_archives/
-- http://staff.feedtailor.jp/2016/08/10/hugo_16/
 
 ## sitemap.xml の作成
 
@@ -346,7 +421,33 @@ baseName = "feed"
 
 ## 数式を表示できるようにする
 
-実施中。。。
+Hugo ではデフォで **Mathjax** というものを利用できる。  
+`config.toml` に以下を設定することで有効になる。
+
+```
+[Params]
+  mathjax = true
+```
+
+`$$` `$$` で囲めば数式になる。
+
+$$
+a = b + c\\\\\\
+x = y + z
+$$
+
+上記は以下のように書いている。
+
+```
+$$
+a = b + c\\\\\\
+a = b + c
+$$
+```
+
+なぜか改行はバックスラッシュが 6 つ必要、、、？  
+書きっぷりは [公式](https://www.mathjax.org/) など参照。
+
 
 ## Gist-it で Github のソースコード貼り付け
 

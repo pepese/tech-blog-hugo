@@ -8,6 +8,8 @@ tags:
 - kibana
 - watcher
 draft: true
+archives:
+- 2019/05
 ---
 
 [Watcher](https://www.elastic.co/guide/jp/x-pack/current/watcher-getting-started.html) についてまとめる。

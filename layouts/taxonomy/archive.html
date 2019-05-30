@@ -1,8 +1,12 @@
+{{ define "main" }}
 <h3>アーカイブ：{{ .Title }}</h3>
 </pre>
 {{ range .Data.Pages }}
 <li>
     <div class="date">{{ .Date.Format "2006.01.02 (Mon)" }}</div>
-    <a href="{{ .Permalink }}">{{ .Title }}</a>
+    <h3 class="list__title post__title ">
+        <a href="{{ .Permalink }}">{{ .Title }}</a>
+    </h3>
 </li>
+{{ end }}
 {{ end }}

@@ -24,6 +24,7 @@ googleAnalytics = "UA-42388425-3"
   post_navigation = true
   post_meta = ["date", "categories", "translations"]
   images = ["img/yaruwo.gif"]
+  mathjax = true
 
 [Params.sidebar]
   home = "right"
