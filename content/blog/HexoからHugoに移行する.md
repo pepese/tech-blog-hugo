@@ -5,6 +5,10 @@ slug: "hugo-basics"
 tags:
 - hugo
 draft: true
+archives:
+- 2019
+- 2019/05
+- 2019/05/26
 ---
 
 Hexo から Hugo に移行する時のメモ。
@@ -72,7 +76,6 @@ git submodule add https://github.com/Vimux/mainroad themes/mainroad
 設定はテーマによってクセがあるので、テーマの github をよく見ること。
 
 ```
-
 DefaultContentLanguage = "ja"
 languageCode = "ja-JP"
 
@@ -88,10 +91,9 @@ googleAnalytics = "xxxx"
   readmore = true
 
 [Params.sidebar]
-  home = "right" # Configure layout for home page
-  list = "left"  # Configure layout for list pages
-  single = true # Configure layout for single pages
-  # Enable widgets in given order
+  home = "right"
+  list = "left"
+  single = true
   widgets = ["social", "recent", "taglist"]
 
 [Params.widgets]
@@ -162,6 +164,13 @@ $ git push origin master
 ```
 
 `branch` 作るとかは好みで。
+
+## アーカイブページの作成
+
+実施中。。。
+
+- https://backport.net/blog/2017/09/08/hugo_monthly_archives/
+- http://staff.feedtailor.jp/2016/08/10/hugo_16/
 
 ## sitemap.xml の作成
 
@@ -295,7 +304,39 @@ amazon_ad_tag = "xxxxxxxx"; amazon_ad_width = "160"; amazon_ad_height = "600"; a
 
 ## RSS Feedの設置
 
+RSS のファイルはデフォで作成されているが、`index.xml` という名前でちょっとイヤなので `config.toml` に以下の設定をしてリネームする。
+
+```
+[outputFormats.RSS]
+baseName = "feed"
+```
+
+上記で `/feed.xml` で参照できるようになるので、以下のように好きな場所にボタンを設置する。
+
+```html
+<!-- RSS Feed start -->
+<a href="/feed.xml" title="RSS Feed"><img src="/img/rss_32.png" alt="RSSを購読する"></a>
+<!-- RSS Feed end -->
+```
+
 ## OGPの設定
+
+[OGP](http://ogp.me/) （Open Graph Protcol）は、FacebookやTwitterなどのSNSでシェアされた際に、そのページのタイトル・URL・概要・サムネイル画像を表示させる仕組みのこと。  
+以下で OGP が有効になる。
+
+```
+[Params]
+  opengraph = true
+```
+
+以下で画像を設定できる。
+
+```
+[Params]
+  images = ["img/yaruwo.gif"]
+```
+
+なお、上記の設定方法は現在のテーマが利用している `_internal/` 以下のファイルを利用するもので標準の [Internal Template](https://github.com/gohugoio/hugo/tree/master/tpl/tplimpl/embedded/templates) の仕様に従っている。
 
 ## URLのクロールとインデックス登録を検索エンジンにリクエストする
 
@@ -304,6 +345,8 @@ amazon_ad_tag = "xxxxxxxx"; amazon_ad_width = "160"; amazon_ad_height = "600"; a
 - [bing](https://www.bing.com/toolbox/submit-site-url)
 
 ## 数式を表示できるようにする
+
+実施中。。。
 
 ## Gist-it で Github のソースコード貼り付け
 
