@@ -13,6 +13,7 @@ $
 - aws
     - ec2
     - elasticsearch
+    - iam
     - kibana
     - lambda
     - watcher
