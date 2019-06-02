@@ -14,6 +14,7 @@ $
     - ec2
     - elasticsearch
     - kibana
+    - lambda
     - watcher
 - hugo
 - kubernetes

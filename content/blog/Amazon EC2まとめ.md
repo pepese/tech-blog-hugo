@@ -59,6 +59,53 @@ c5d.xlarge
 
 [参考](https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/EBSOptimized.html)
 
+## AMI
+
+AMI は以下の分類がある。
+
+- アーキテクチャ
+    - x86
+    - Arm
+- ビット数
+    - 32bit
+    - 64bit
+- 仮想化方式
+    - 準仮想化（ Paravirtual : PV ）※古いので利用は推奨しない
+    - 完全仮想化（ Hardware-assisted VM : HVM ）
+- ブートストレージ
+    - EBS Backed
+    - Instance Store-Backed (S3 Backed)
+
+推奨は、 64bit HVM EBS-Backed 。
+
+[参考](https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/AMIs.html)
+
+## 物理ホストの専有
+
+- 2 つの方法
+    - ハードウェア専有インスタンス（Dedicated Instance）[参考](https://aws.amazon.com/jp/ec2/pricing/dedicated-instances/)
+    - Amazon EC2 Dedicated Host [参考](https://aws.amazon.com/jp/ec2/dedicated-hosts/)
+- 共通の機能
+    - ユーザ専有の物理サーバにインスタンスを起動可能（他ユーザのインスタンスは起動しない）
+    - 従量課金やクラウドのメリットはそのまま確保
+- Dedicated Hosts の特徴
+    - 物理ホストへのインスタンス配置が制御・確認可能
+    - 物理ホスト単位のソフトウェアライセンスを持ち込み（ BYOL ）可能
+    - 物理ホスト単位で課金
+    - 一部の OS が利用できないので注意
+
+## プレイスメントグループ オプション
+
+EC2 インスタンスの物理的な配置戦略オプション。[参考](https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/placement-groups.html)
+
+- Cluster
+    - EC2 インスタンスを密な場所に配置し、ネットワークパフォーマンスを最適化
+    - 単一 AZ に閉じる
+- Spread
+    - EC2 インスタンスを別々のハードウェアに分散して配置、物理サーバ障害時に複数のインスタンスが影響を受ける確率を低減
+    - 同一 AZ にクラスタを展開している際などに有効
+    - AZ 跨ぎで定義することが可能で、 1 AZ あたり実行中のインスタンスは最大 7
+
 ## Key Pair
 
 [Key Pair](https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/ec2-key-pairs.html) は、 EC2 インスタンス上の OS に対する安全な認証を提供する。  
@@ -120,22 +167,3 @@ EC2 間のネットワーク帯域には以下の制限がある。
     - 各インスタンスタイプが持つ通信帯域の最大
 
 EC2 間で 5 Gbps 以降の帯域幅を実現するには、通信の多重化とマルチコアへの分散を意識する必要がる。（ RPS/RFS の設定など）
-
-## AMI の分類
-
-- アーキテクチャ
-    - x86
-    - Arm
-- ビット数
-    - 32bit
-    - 64bit
-- 仮想化方式
-    - 準仮想化（ Paravirtual : PV ）※古いので利用は推奨しない
-    - 完全仮想化（ Hardware-assisted VM : HVM ）
-- ブートストレージ
-    - EBS Backed
-    - Instance Store-Backed (S3 Backed)
-
-推奨は、 64bit HVM EBS-Backed 。
-
-[参考](https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/AMIs.html)
