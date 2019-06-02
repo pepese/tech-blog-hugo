@@ -8,7 +8,10 @@ $
 
 # タグ整理
 
+全て小文字にする。
+
 - aws
+    - ec2
     - elasticsearch
     - kibana
     - watcher
