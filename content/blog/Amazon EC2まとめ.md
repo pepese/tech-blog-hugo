@@ -13,7 +13,7 @@ archives:
 [Amazon EC2](https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/concepts.html)についてまとめる。
 
 - 概要
-- オートスケーリング
+- Amazon EC2 Auto Scaling
 
 <!--more-->
 
@@ -197,4 +197,34 @@ EC2 ログイン時に Key Pair （秘密鍵と公開鍵のペア）が照合さ
 - AWS では公開鍵のみ保持し、起動時に公開鍵を EC2 にコピーする
 - 秘密鍵は、ユーザにて適切に管理・保管する必要がある
 
-# オートスケーリング
+# Amazon EC2 Auto Scaling
+
+[Amazon EC2 Auto Scaling](https://docs.aws.amazon.com/ja_jp/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html) について記載する。  
+Amazon EC2 Auto Scaling は [AWS Auto Scaling](https://docs.aws.amazon.com/ja_jp/autoscaling/plans/userguide/what-is-aws-auto-scaling.html) の一部で他には以下がある。
+
+- Amazon EC2 スポットフリートリクエスト
+    - スポットフリートリクエストからインスタンスを起動または削除します。または、料金や容量の問題で中断されたインスタンスを自動的に置き換えます。
+- Amazon ECS
+    - 負荷の変化に応じて ECS サービスの必要数の増減を調整します。
+- Amazon DynamoDB
+    - DynamoDB テーブルまたはグローバルセカンダリインデックスを有効にして、プロビジョニングされた読み取りおよび書き込みキャパシティを増減させ、スロットリングなしでトラフィックの増加を処理します。
+- Amazon Aurora
+    - Aurora DB クラスターにプロビジョニングされた Aurora リードレプリカの数を動的に調整して、アクティブな接続やワークロードの変化を処理します。
+
+Amazon EC2 Auto Scaling には以下の設定が必要。
+
+- [起動テンプレート](https://docs.aws.amazon.com/ja_jp/autoscaling/ec2/userguide/LaunchTemplates.html)
+    - スケール時に起動される EC2 インスタンスの AMI ID、インスタンスタイプ、キーペア、セキュリティグループ、ブロックデバイスマッピングなどを指定
+- [Auto Scaling グループ](https://docs.aws.amazon.com/ja_jp/autoscaling/ec2/userguide/AutoScalingGroup.html)
+    - EC2 インスタンスの最小数、最大数、希望する数などを設定
+- [スケーリングのオプション](https://docs.aws.amazon.com/ja_jp/autoscaling/ec2/userguide/scaling_plan.html#scaling_typesof)
+    - スケールする特定の条件を設定
+
+また、以下の点に注意が必要。
+
+- [ヘルスチェック](https://docs.aws.amazon.com/ja_jp/autoscaling/ec2/userguide/healthcheck.html)
+    - [Auto Scaling グループへの Elastic Load Balancing ヘルスチェックの追加](https://docs.aws.amazon.com/ja_jp/autoscaling/ec2/userguide/as-add-elb-healthcheck.html)
+
+## 起動テンプレート
+## Auto Scaling グループ
+## スケーリングのオプション
