@@ -138,14 +138,28 @@ ESLint はデフォルトでは ES5 にしか対応していない。
 
 # 自分の設定
 
-{
-    "plugins": ["eslint-plugin-node"],
-    "env": {"es6": true, "node": true},
-    "parserOptions": {"sourceType": "module"},
+```javascript
+module.exports = {
+    "root": true,
+    "env": {
+        "node": true,
+        "commonjs": true,
+        "es6": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:prettier/recommended"
+    ],
+    "parserOptions": {
+        "ecmaVersion": 2017,
+        "sourceType": "module"
+    },
     "rules": {
-        "node/no-unsupported-features": [2, {"version": 4}] // <-- Node.js v4.x (Argon) でサポートされない ES6 機能を警告する
+        "no-console": 0,
+        "no-debugger": 0
     }
-}
+};
+```
 
 # プラグイン
 
