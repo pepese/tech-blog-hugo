@@ -33,7 +33,7 @@ $ npm install --save-dev eslint
 
 ```javascript
 "scripts": {
-    "lint": "eslint --ext js -f codeframe --fix"
+    "lint": "eslint --ext .js --ignore-path .gitignore . -f codeframe --fix"
 },
 ```
 
