@@ -22,8 +22,8 @@ archives:
 ここで述べる手法は **scikit-learn** に実装されている。  
 なお実装例については以下記事の後半で紹介している。
 
-- [Pythonで機械学習 SVMで2クラス分類問題編](https://pepese.github.io/blog/python-ml-dl-svm-2class/)
-- [Pythonで機械学習 SVMで多クラス分類問題編](https://pepese.github.io/blog/python-ml-dl-svm-multiclass/)
+- [Pythonで機械学習 SVMで2クラス分類問題編](https://blog.pepese.com/entry/python-ml-dl-svm-2class/)
+- [Pythonで機械学習 SVMで多クラス分類問題編](https://blog.pepese.com/entry/python-ml-dl-svm-multiclass/)
 
 # 学習用データと評価用データの使い方
 
@@ -102,8 +102,8 @@ $$ F値（F-measure）=\frac{ 2 \times 適合率 \times 再現率 }{ 適合率 +
 2クラス分類問題などでは片方が `Positive` 、もう片方が `Negative` となるため、片方のラベルを Positive として設定してあげることになる。  
 繰り返しになるが、実装例については以下記事の後半で紹介している。
 
-- [Pythonで機械学習 SVMで2クラス分類問題編](https://pepese.github.io/blog/python-ml-dl-svm-2class/)
-- [Pythonで機械学習 SVMで多クラス分類問題編](https://pepese.github.io/blog/python-ml-dl-svm-multiclass/)
+- [Pythonで機械学習 SVMで2クラス分類問題編](https://blog.pepese.com/entry/python-ml-dl-svm-2class/)
+- [Pythonで機械学習 SVMで多クラス分類問題編](https://blog.pepese.com/entry/python-ml-dl-svm-multiclass/)
 
 # 精度の向上
 

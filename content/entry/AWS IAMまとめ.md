@@ -5,7 +5,7 @@ slug: "aws-iam-basics"
 tags:
 - aws
 - iam
-draft: true
+draft: false
 archives:
 - 2019/06
 ---
