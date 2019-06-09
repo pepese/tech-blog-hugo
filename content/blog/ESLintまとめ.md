@@ -1,9 +1,10 @@
 ---
 title: "ESLintまとめ"
 date: 2019-06-03T17:16:43+09:00
-slug: ""
+slug: "eslint-basics"
 tags:
-- tag_name
+- javascript
+- eslint
 draft: true
 archives:
 - 2019/06
