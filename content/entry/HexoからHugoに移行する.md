@@ -237,11 +237,11 @@ archives:
 公開用コンテンツが生成された `public/` を普通に Github Pages に対応したリポジトリに push する。
 
 ```bash
+$ rm -fR public
+$ git submodule add -f https://pepese@github.com/pepese/pepese.github.io.git public
 $ hugo
-$ cd public/
-$ git init
-$ git remote add origin https://pepese@github.com/pepese/pepese.github.io.git
-$ git add --all
+$ cd public
+$ git add .
 $ git commit -m "update"
 $ git push origin master
 ```
