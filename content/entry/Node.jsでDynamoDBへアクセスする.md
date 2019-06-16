@@ -53,7 +53,7 @@ node_modules
 - app/getItem.js
 - app/deleteItem.js
 
-[DynamoDB入門](https://pepese.github.io/blog/dynamodb-basics/) で作成したテーブルにアクセスする前提。
+[DynamoDB入門](https://blog.pepese.com/entry/dynamodb-basics/) で作成したテーブルにアクセスする前提。
 
 ## app/dynamodb.js
 

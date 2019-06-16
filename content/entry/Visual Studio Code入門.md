@@ -79,6 +79,29 @@ VS Code で実行できる各種コマンドには名前が付いていて、そ
 
 # オススメの拡張機能
 
+## EditorConfig
+
+以下のコマンドを実行して VSCode の [EditorConfig](https://editorconfig.org/) 拡張機能を有効にする。
+
+```bash
+$ code --install-extension EditorConfig.EditorConfig
+```
+
+その後 `.editorconfig` をプロジェクトルートへ作成する。（設定内容はお好みで）
+
+```
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+
+[*.{js,json}]
+indent_style = space
+indent_size = 2
+```
+
 ## 視覚サポート
 
 - Trailing Spaces

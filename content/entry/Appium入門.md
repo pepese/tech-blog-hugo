@@ -87,7 +87,7 @@ $ xcodebuild build test -project /usr/local/lib/node_modules/appium/node_modules
 
 ## Android
 
-Android 開発環境の構築方法については [Androidアプリ入門 Macで環境構築編](https://pepese.github.io/blog/android-env-on-mac/) を参照。  
+Android 開発環境の構築方法については [Androidアプリ入門 Macで環境構築編](https://blog.pepese.com/entry/android-env-on-mac/) を参照。  
 以下のコマンドで正しく環境構築されたか確認する。
 
 ```sh

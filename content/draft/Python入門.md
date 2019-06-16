@@ -39,7 +39,7 @@ draft: true
 
 anyenv の pyenv で構築する。
 
-- [すべての**envを管理するanyenv](https://pepese.github.io/blog/anyenv/)
+- [すべての**envを管理するanyenv](https://blog.pepese.com/entry/anyenv/)
 
 ## pip
 

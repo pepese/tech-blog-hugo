@@ -2,7 +2,7 @@
 DefaultContentLanguage = "ja"
 languageCode = "ja-JP"
 
-baseURL = "https://pepese.github.io/"
+baseURL = "https://blog.pepese.com/"
 title = "ぺーぺーSEのテックブログ"
 theme = "mainroad"
 enableRobotsTXT = true

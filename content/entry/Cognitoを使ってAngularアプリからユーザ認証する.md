@@ -16,8 +16,8 @@ archives:
 Amazon Cognito を使ってユーザ認証ができる Angular アプリを作成してみる。  
 以下の記事の知識を前提とする。
 
-- [Macで開発環境を作る](https://pepese.github.io/blog/mac-dev-environment/)
-- [Angular入門](http://blog.pepese.com/entry/2017/03/16/152007)
+- [Macで開発環境を作る](https://blog.pepese.com/entry/mac-dev-environment/)
+- [Angular入門](http://blog.pepese.com/entry/angular-basics/)
 
 以降、以下の順で記載する。
 

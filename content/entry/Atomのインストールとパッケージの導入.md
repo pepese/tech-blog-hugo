@@ -29,7 +29,7 @@ $ brew cask install atom
 
 上記がなんのことかわからない人は以下参照。
 
-- https://pepese.github.io/blog/homebrew-basics/
+- https://blog.pepese.com/entry/homebrew-basics/
 
 # 起動方法
 

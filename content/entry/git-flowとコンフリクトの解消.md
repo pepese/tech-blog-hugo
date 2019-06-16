@@ -13,8 +13,8 @@ archives:
 git-flowの概要とマージ時のコンフリクトの解消についてまとめる。  
 gitについては以下を参照。
 
-- [Git入門](https://pepese.github.io/blog/git-basics/)
-- [Gitコマンド整理](https://pepese.github.io/blog/git-commands/)
+- [Git入門](https://blog.pepese.com/entry/git-basics/)
+- [Gitコマンド整理](https://blog.pepese.com/entry/git-commands/)
 
 以下の順で記載する。
 

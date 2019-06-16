@@ -41,7 +41,7 @@ Node.js/Expressアプリケーションのテストをしてみる。
 
 以下の記事を読んだ前提で書く。
 
-- [Express入門](https://pepese.github.io/blog/express-basics/)
+- [Express入門](https://blog.pepese.github.com/entry/express-basics/)
 
 # 環境設定
 
@@ -54,7 +54,7 @@ $ ndenv rehash
 
 ## ローカルインストール
 
-[Express入門](https://pepese.github.io/blog/express-basics/)で作成したプロジェクトにて以下を導入する。
+[Express入門](https://blog.pepese.com/entry/express-basics/)で作成したプロジェクトにて以下を導入する。
 
 ```sh
 $ yarn add mocha chai sinon nyc rimraf --dev
