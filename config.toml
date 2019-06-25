@@ -7,6 +7,7 @@ title = "ぺーぺーSEのテックブログ"
 theme = "mainroad"
 enableRobotsTXT = true
 googleAnalytics = "UA-42388425-3"
+preserveTaxonomyNames = true
 
 [Author]
   name = "ぺーぺーSE"
