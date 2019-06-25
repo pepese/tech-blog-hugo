@@ -177,9 +177,9 @@ resetには「 **soft** 」、「 **mixed** 」（デフォルト）、「 **har
 > リモートリポジトリから情報を取得し、欲しいコミットのコミットIDを指定して現在のブランチに取り込む。
 >
 > ```sh
-> $ git fetch
-> $ git cherry-pick <commit_id>
-> ```
+$ git fetch
+$ git cherry-pick <commit_id>
+```
 
 # ブランチ操作
 
