@@ -134,3 +134,12 @@ indent_size = 2
 
 - Shortcuts
     - VS Code 最下部にショートカットボタンを追加
+- [Material Icon Theme](https://github.com/PKief/vscode-material-icon-theme)
+    - ファイルアイコンをマテリアルデザインになる
+- [Indent Rainbow](https://github.com/oderwat/vscode-indent-rainbow)
+    - インデントレベルごとに背景色が付く（超見やすいw）
+- [Bracket Pair Colorizer](https://github.com/CoenraadS/BracketPair)
+    - 対応するカッコに縦横線のハイライトを表示（超見やすいw）
+- [Base16 Themes](https://marketplace.visualstudio.com/items?itemName=AndrsDC.base16-themes)
+    - 気に入った Color Theme
+    - Dark Monokai がよい
