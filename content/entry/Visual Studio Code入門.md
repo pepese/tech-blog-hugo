@@ -118,6 +118,8 @@ indent_size = 2
 
 ## Git
 
+- [Git Lens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)
+    - 誰が・いつ編集したかをわかりやすく表示
 - Git History
     - ツリー表示や差分表示など
 - gi
@@ -129,6 +131,15 @@ indent_size = 2
 
 - Auto Complete Tag
     - タグを自動で閉じて、開始・終了タグを変更したらもう片方のタグも自動で変更
+
+## Javascript
+
+- [Import Cost](https://marketplace.visualstudio.com/items?itemName=wix.vscode-import-cost)
+    - importしたファイルの容量を表示してくれる拡張機能
+- [Path Intellisense](https://marketplace.visualstudio.com/items?itemName=christian-kohler.path-intellisense)
+    - ファイルパスの自動入力
+- [Quokka.js](https://marketplace.visualstudio.com/items?itemName=WallabyJs.quokka-vscode)
+    - エラーになる箇所を実行前に評価してくれる拡張機能
 
 ## その他
 
@@ -143,3 +154,5 @@ indent_size = 2
 - [Base16 Themes](https://marketplace.visualstudio.com/items?itemName=AndrsDC.base16-themes)
     - 気に入った Color Theme
     - Dark Monokai がよい
+- [Trailing Spaces](https://marketplace.visualstudio.com/items?itemName=shardulm94.trailing-spaces)
+    - 全角や余計なスペースをハイライトしてくれる拡張機能
