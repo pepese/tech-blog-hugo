@@ -26,6 +26,17 @@ archives:
 基本は[公式](https://github.com/riywo/anyenv)を見て欲しいが、ここでは本ブログ作成日におけるMac環境へのインストールについて記載する。  
 以下、anyenvのインストール方法。
 
+## Homebrew
+
+Homebrew にも対応した模様。
+
+```bash
+$ brew install anyenv
+$ anyenv init
+```
+
+## Manual git checkout
+
 ```sh
 $ git clone https://github.com/riywo/anyenv ~/.anyenv
 $ echo 'export PATH="$HOME/.anyenv/bin:$PATH"' >> ~/.bash_profile
