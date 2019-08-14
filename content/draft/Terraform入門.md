@@ -32,16 +32,15 @@ archives:
 # 環境設定
 
 `terraform` コマンドのバージョン管理ツール [tfenv](https://github.com/tfutils/tfenv) を導入するところから始める。  
-筆者は [anyenv](https://github.com/anyenv/anyenv) 経由でインストールする。
+（ anyenv でも tfenv 導入可能だが、なんか変になるので非推奨）
 
 ```bash
-$ anyenv update
-$ anyenv install tfenv
+$ brew install tfenv
 $ exec $SHELL -l
 $ which tfenv
-/Users/xxxx/.anyenv/envs/tfenv/bin/tfenv
+/usr/local/bin/tfenv
 $ tfenv -v
-tfenv 1.0.1-8-gc3f5d5e
+tfenv 1.0.1
 $ tfenv list-remote
 0.12.6
 〜省略〜

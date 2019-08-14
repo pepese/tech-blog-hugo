@@ -99,14 +99,27 @@ HTTP の各箇所のデータサイズを検査する。
 
 # Rules / ルール
 
-- Rate-based rule / レートベースのアクセス制限
-  - https://dev.classmethod.jp/cloud/aws/aws-waf-rate-based-rules/
+ルールは Condistions を束ねるもの。  
+ホワイトリスト条件、ブラックリスト条件でまとめるとよい。  
+以下の設定がる。
 
-おそらく「ブラックリストの条件」「ホワイトリストの条件」」をまとめる用途で Rules を利用する。
+- Rule type / ルールのタイプ
+  - Regular rule / 条件を指定するのみのルール
+  - Rate-based rule / 条件を満たすアクセス 5 分間で指定数以上来たらアクセスを遮断
 
 # Web ACLs
 
-あああ。
+作成したルールを Web ACLs として適用する。
+
+- If a request matches all of the conditions in a rule, take the corresponding action
+  - 作成したルールを追加し、以下を選択する
+    - Allow : ルールに合致するリクエストを許可する（ホワイトリスト）
+    - Block : ルールに合致するリクエストを拒否する（ブラックリスト）
+    - Count : ルールに合致したリクエストをカウント（テスト用）
+- If a request doesn't match any rules, take the default action
+  - Default action : ルールに合致しないリクエストの扱い（デフォルトでリクエストをどう扱うか）
+    - Allow all requests that don't match any rules : 許可
+    - Block all requests that don't match any rules : 拒否
 
 # AWS Shield
 

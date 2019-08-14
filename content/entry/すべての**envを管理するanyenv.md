@@ -33,6 +33,7 @@ Homebrew にも対応した模様。
 ```bash
 $ brew install anyenv
 $ anyenv init
+$ echo 'eval "$(anyenv init -)"' >> ~/.bash_profile
 ```
 
 ## Manual git checkout
