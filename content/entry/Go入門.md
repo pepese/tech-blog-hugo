@@ -137,9 +137,11 @@ $ go mod init # `GO111MODULE=on go mod init` のように一行でも
 go: creating new go.mod: module github.com/<あなたのGithubアカウント名>/<golangプロジェクト>
 $ ls
 go.mod
-$ touch app.go # 依存ライブラリ含め好きなコード書く
-$ go mod tidy  # 依存ライブラリの解決
-$ go run app.go
+$ touch app.go    # 依存ライブラリ含め好きなコード書く
+$ go mod tidy     # 依存ライブラリの解決
+$ go run app.go   # ビルド+実行
+$ go build app.go # ビルド
+$ ./app
 ```
 
 基本的にはどこのディレクトリで開発しようとも **module-aware mode** で開発することになると思う。
@@ -176,6 +178,37 @@ VS Code には Go の各種ツールと連携する拡張機能があり、 VS C
     - `go get -u -v golang.org/x/tools/cmd/guru`
 - gotests
     - `go get -u -v github.com/cweill/gotests/...`
+
+## .editorconfig
+
+```
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = false
+charset = utf-8
+indent_style = space
+indent_size = 2
+
+[{Makefile,go.mod,go.sum,*.go}]
+indent_style = tab
+indent_size = 4
+trim_trailing_whitespace = true
+```
+
+## docker によるマルチステージビルド
+
+```
+FROM golang:1.12.8-alpine3.10 as build
+ADD ./ ./
+RUN go build main.go
+
+FROM alpine:latest
+COPY --from=build /go/main /app/main
+CMD [ "/app/main" ]
+```
 
 ## デバッグ環境作成
 
