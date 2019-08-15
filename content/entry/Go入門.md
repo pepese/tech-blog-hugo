@@ -55,6 +55,7 @@ export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 ``` bash
 export GOPATH=`go env GOPATH`
 export PATH=$PATH:$GOPATH/bin
+export GO111MODULE=on
 ```
 
 反映。
@@ -111,7 +112,7 @@ Go Modules の概要は以下。
 		- `$GOPATH/src/github.com` 配下に普通に `git clone` した状態のモジュールを参照する
 		    - `go get` で `go1` タグ・ブランチもしくは最新の `master` ブランチを取得したもの
     - **module-aware mode**
-	    - `go mod` コマンド・ `go.mod` ファイルを利用した依存性管理
+	    - `go mod` コマンド・ `go.mod` ファイルを利用した依存性管理（ `go.sum` ：依存モジュールのチェックサムの管理）
 	    - 標準 pkg 以外の全てのパッケージをモジュールとして管理する
 		- GOPATH mode とは異なり、 `$GOPATH/pkg/mod` 配下に同じモジュールでも Semantic Versioning された単位で管理され `go.mod` に記載されたバージョンを参照する
 	- 環境変数 `GO111MODULE`
