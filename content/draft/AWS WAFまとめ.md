@@ -82,7 +82,7 @@ HTTP の各箇所のデータサイズを検査する。
 - Part of the request to filter on / 検査する場所の定義
   - 「Cross-site scripting / クロスサイトスクリプティング」節の同項目に同じ
 - Comparison operator
-  - 「>」「<」といった比較演算子を定義
+  - 「 Equals 」「 Not equal 」「 Greater than 」「 Greater than or equal 」「 Less than 」「 Less than or equal 」といった比較演算子を定義
 - Size (Bytes) / データサイズの定義
 - Transformation / 検査の前に行う変換を定義
   - 「Cross-site scripting / クロスサイトスクリプティング」節の同項目に同じ
@@ -96,6 +96,19 @@ HTTP の各箇所のデータサイズを検査する。
 
 「Cross-site scripting / クロスサイトスクリプティング」節の設定と同様の箇所に対して、文字列・正規表現によるマッチングの検査を行う。  
 ここまでで雰囲気分かると思うので詳細省略。
+
+- Type
+  - 「 String match 」か「 Regex match 」か選ぶ
+- Part of the request to filter on / 検査する場所の定義
+  - 「Cross-site scripting / クロスサイトスクリプティング」節の同項目に同じ
+- Match type
+  - 「 Contains 」「 Exactly matches 」「 Starts with 」「 Ends with 」「　Contains words 」から選ぶ
+- Transformation / 検査の前に行う変換を定義
+  - 「Cross-site scripting / クロスサイトスクリプティング」節の同項目に同じ
+- Value is base64-encoded
+  - Base64 エンコードされたデータか否か
+- Value to match // Regex patterns to match to request
+  - 合致する文字列 // 合致する正規表現
 
 # Rules / ルール
 
