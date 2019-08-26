@@ -90,9 +90,9 @@ terraform {
   required_version = ">= 0.12.0"
 
   backend "s3" {
-    bucket = "your-bucket-name"      //e.g. terraform-state-bucket
+    bucket = "your-bucket-name"  //e.g. terraform-state-bucket
     key    = "terraform.tfstate" //この文字列で tfstate ファイルが作られてS3に置かれる
-    region = "ap-northeast-1"        //S3のリージョン
+    region = "ap-northeast-1"    //S3のリージョン
   }
 }
 
@@ -143,6 +143,61 @@ drwxr-xr-x  3 xxxx  staff   96  8 13 16:50 .terraform <- できてる！
 -rw-r--r--  1 xxxx  staff   70  8 13 16:46 variables.tf
 ```
 
+# 環境差分の扱い
+
+独自なので参考までに。
+
+```
+$ tree
+.
+├── modules
+│   ├── variables.tf # 変数定義、値の代入は各環境(dev/std/prd)の terraform.tfvars で
+│   ├── ec2.tf
+│   └── その他もろもろ.tf
+└── services
+    ├── dev
+    │   ├── main.tf
+    │   └── terraform.tfvars
+    ├── std
+    │   ├── main.tf
+    │   └── terraform.tfvars
+    └── prd
+        ├── main.tf
+        └── terraform.tfvars
+```
+
+各環境の `main.tf` は以下のような感じ。
+
+```
+terraform {
+  required_version = ">= 0.12.0"
+
+  backend "s3" {
+    bucket = "your-bucket-name"
+    key    = "terraform_dev.tfstate"
+    region = "ap-northeast-1"
+  }
+}
+
+provider "aws" {
+  version = "~> 2.0"
+  access_key = var.access_key
+  secret_key = var.secret_key
+  region     = var.region
+}
+
+module "my_module" {
+  source  = "../../modules"
+}
+```
+
+各環境向けに実行するときは各環境のパス（ `/services/dev` など）をカレントにして実行する。
+
 # 参考
 
+- [Terraform Module Registry](https://registry.terraform.io/)
+- [terraform-community-modules](https://github.com/terraform-community-modules)
 - [AWS Provider](https://www.terraform.io/docs/providers/aws/index.html) を参照。
+- [Terraform職人入門: 日々の運用で学んだ知見を淡々とまとめる](https://qiita.com/minamijoyo/items/1f57c62bed781ab8f4d7)
+  - 環境差分の扱いなど参考
+  - `module` と `-var-file` で環境差分（ `dev` `std` `prd` ）を扱うとよいと思った
