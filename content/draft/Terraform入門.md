@@ -151,13 +151,14 @@ drwxr-xr-x  3 xxxx  staff   96  8 13 16:50 .terraform <- できてる！
 $ tree
 .
 ├── modules
-│   ├── variables.tf # 変数定義、値の代入は各環境(dev/std/prd)の terraform.tfvars で
-│   ├── ec2.tf
+│   ├── variables.tf # 変数定義、値の代入は各環境(dev/std/prd)の main.tf で
+│   ├── aws.tf       # provider の設
+│   ├── ec2.tf       # 以降、ここのリソース定義
 │   └── その他もろもろ.tf
 └── services
     ├── dev
     │   ├── main.tf
-    │   └── terraform.tfvars
+    │   └── terraform.tfvars # ローカルで access_key/secret_key だけ設定し、 git 管理はしない
     ├── std
     │   ├── main.tf
     │   └── terraform.tfvars
@@ -170,24 +171,76 @@ $ tree
 
 ```
 terraform {
-  required_version = ">= 0.12.0"
+  required_version = ">= 0.12"
 
   backend "s3" {
-    bucket = "your-bucket-name"
+    bucket = "your-bucket-name" # backend では変数を使えないので注意
     key    = "terraform_dev.tfstate"
     region = "ap-northeast-1"
   }
 }
 
-provider "aws" {
-  version = "~> 2.0"
-  access_key = var.access_key
-  secret_key = var.secret_key
-  region     = var.region
+variable "access_key" {}
+variable "secret_key" {}
+variable "region" {
+  default = "ap-northeast-1"
 }
 
 module "my_module" {
   source  = "../../modules"
+  access_key  = var.access_key
+  secret_key  = var.secret_key
+  region      = var.region
+  // 以降、 modules の variables.tf 内の変数へ値を代入
+  environment = "dev"
+  hoge        = "hoge"
+}
+```
+
+`terraform.tfvars` は以下のような感じ。
+
+```
+access_key = "access_key"
+secret_key = "secret_key"
+```
+
+`aws.tf` は以下。
+
+```
+provider "aws" {
+  version    = "~> 2.25"
+  access_key = var.access_key
+  secret_key = var.secret_key
+  region     = var.region
+}
+```
+
+`variable.tf` は以下のような感じ。
+
+```
+variable "access_key" {}
+variable "secret_key" {}
+variable "region" {
+  default = "ap-northeast-1"
+}
+variable "project" {
+  default = "samplePrj"
+}
+variable "environment" {
+  default = "dev"
+}
+
+locals {
+  base_tags = {
+    Project     = var.project
+    Terraform   = "true"
+    Environment = var.environment
+  }
+
+  base_name       = "${var.project}_${var.environment}"
+  cluster_name    = "${local.base_name}_cluster"
+  default_tags    = merge(local.base_tags, map("kubernetes.io/cluster/${local.cluster_name}", "shared"))
+  cluster_version = "1.13"
 }
 ```
 
