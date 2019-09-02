@@ -33,3 +33,16 @@ $ exec $SHELL -l
 $ which flutter
 $ flutter precache
 ```
+
+# プロジェクトの作成
+
+```bash
+$ flutter create flutter_sample
+$ cd flutter_sample
+$ open -a Simulator
+$ flutter run
+...
+To hot reload changes while running, press "r". To hot restart (and rebuild state), press "R".
+...
+For a more detailed help message, press "h". To detach, press "d"; to quit, press "q".
+```
