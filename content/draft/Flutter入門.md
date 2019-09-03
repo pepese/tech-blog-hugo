@@ -71,14 +71,23 @@ $ tree . -L 1
 
 # あれこれ
 
+## 基本
+
+- Flutter の画面構成は Widget の入れ子・ツリー
+- `main()` から `runApp()` を呼び出して rootWedget を作成する
+- Widget には **StatelessWidget** と **StatefulWidget** がある
+- Widget の主な仕事は `build()` 関数を実装することで、この中でローレベルの Widget を記載する
+- フレームワークは、基になる RenderObject を表す Widget でプロセスが終了するまで、これらの Widget を順番に構築する
+
 ## StatelessWidget
 
 Flutter の画面はテキストであろうがボタンであろうが全画面であろうが全て Widget で実装する。  
 **StatelessWidget** は状態（ state ）を持たない Widget で、 親 Widget から渡された値をそのまま表示するだけ。  
 以下の特徴がある。
 
-- `StatelessWidget` を `extends` した `class` を作成
-- `build()` メソッドを `@override` して Widget を `return` することで描画
+- `StatelessWidget` を 継承（ `extends` ）した Widget クラス（ `class` ）を作成
+- `build()` メソッドをオーバーライド（ `@override` ）して任意の Widget を返却（ `return` ）することで描画
+  - Scaffold Widget はルートページとなるデザインWidgetで基本的なレイアウト構造
 - 子 Widget である StatelessWidget で使用した変数を親 Widget にて変更した場合、子であるStatelessWidgetは全て再描画（build）される
 
 ## StatefulWidget
@@ -86,10 +95,13 @@ Flutter の画面はテキストであろうがボタンであろうが全画面
 状態（ state ）を持つ Widget 。  
 自分の変数を更新することで自分自身を再ビルドすることができる。
 
-- `StatefulWidget` を `extends` した `class` を作成（クラス①）
-- `State<上記のclass>` を `extends` した `class` を作成（クラス②）
-- クラス①の `createState()` メソッドを `@override` してクラス②をリターン
-- クラス②の `build()` メソッドを `@override` して Widget を `return` することで描画
+- `StatefulWidget` を継承した Widget クラスを作成
+- `State<Widget クラス>` を継承した State クラスを作成
+- Widget クラスの `createState()` メソッドをオーバーライドして State クラスをリターン
+- State クラスの `build()` メソッドをオーバーライドして任意の Widget を返却することで描画
+  - Scaffold Widget はルートページとなるデザインWidgetで基本的なレイアウト構造
+- 状態（ state ）が変更された場合は再描画される（ `setState()` ）
+- State クラスに機能的なメソッドを実装
 
 state のライフサイクルは以下の 10 ステップ。
 
@@ -119,6 +131,35 @@ state のライフサイクルは以下の 10 ステップ。
     - disposeが呼び出されると、Stateオブジェクトは再マウントされない
     - ここで `setState()` メソッドを呼び出した場合、エラーとなる
 
+## 操作イベント
+
+タップなどの操作イベントは GestureDetector で拾う？
+
+## データの保存
+
+- [Flutterで画像をローカルに保存して画面に表示](http://karmactonics.hatenablog.com/entry/2018/09/02/223139)
+  - [path_provider](https://pub.dev/packages/path_provider)
+  - [iOSアプリデータの保存](https://qiita.com/rsahara/items/4a957c77751cda7d2d16)
+  - [Android Keystoreを使って秘匿情報を保持する](https://qiita.com/f_nishio/items/485490dea126dbbb5001)
+- [flutter_secure_storage](https://pub.dev/packages/flutter_secure_storage)
+  - これだわw
+
+## 画像表示
+
+- [Flutterで画像を表示する方法【まとめ】](https://qiita.com/yu124choco/items/a2710ec004d3425a2a0b)
+  1. プロジェクトルートに `assets/` ディレクトリを作って画像を保存
+  2. `pubspec.yaml` を編集
+  3. Image Widgetを配置
+
+## HTTP リクエスト
+
+- [Fetch data from the internet](https://flutter.dev/docs/cookbook/networking/fetch-data)
+
+## 処理中
+
+- [progress_dialog](https://pub.dev/packages/progress_dialog)
+- [Flutterでプログレスダイアログ](https://www.shogogeek.com/entry/20181107/1541561400)
+
 # 参考
 
 - [Flutter 入門](https://flutter.keicode.com/)
@@ -127,3 +168,5 @@ state のライフサイクルは以下の 10 ステップ。
 - [全てがここで分かる！！Flutter 超入門](https://tech-rise.net/category/programming/flutter/)
 - [Flutterプロジェクトのディレクトリ構成とレイヤー案](https://issus.me/projects/1520/issues/35)
 - [Flutterのコードはどのように分割したらわかりやすいだろう？](https://note.mu/nbht/n/n339076d40641)
+- [Material Components widgets](https://flutter.dev/docs/development/ui/widgets/material)
+- [Dartで他のファイルを参照するには？](https://codeday.me/jp/qa/20190122/159366.html)
