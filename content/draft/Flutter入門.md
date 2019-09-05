@@ -133,7 +133,20 @@ state のライフサイクルは以下の 10 ステップ。
 
 ## 操作イベント
 
-タップなどの操作イベントは GestureDetector で拾う？
+タップなどの操作イベントは GestureDetector で拾う。
+
+```dart
+return GestureDetector(
+  onTap: () {
+    print('tapped');
+  },
+  child: <任意の Widget>
+);
+```
+
+## 画面遷移
+
+- [Navigation & routing](https://flutter.dev/docs/development/ui/navigation)
 
 ## データの保存
 
