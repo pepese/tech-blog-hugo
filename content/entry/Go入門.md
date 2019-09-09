@@ -37,6 +37,7 @@ https://golang.org/doc/install/source#environment
     - `go env GOPATH` で値確認
     - go の各種資材が配置パスであってプロジェクトのパスでないことに注意
     - プロジェクトのパスは `$GOPATH/src/github.com/<Githubアカウント名>/<プロジェクト名>`
+	    - ただし、後述する **GOPATH mode** の場合
 - `GOOS`
     - コンパイルして作成するバイナリの対象 OS を指定する
 - `GOARCH`
@@ -62,6 +63,7 @@ export GO111MODULE=on
 
 ```bash
 $ source .bash_profile
+# exec $SHELL -l
 ```
 
 また、 `$GOPATH` 以下のディレクトリ構造は以下のようになる。
