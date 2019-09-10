@@ -72,15 +72,15 @@ draft: true
     - Pod 内には複数種類のコンテナを格納でき、メインのコンテナに加えて、補助的な役割を担うコンテナ（サブコンテナ）を加える構成のことを **サイドカー** と呼ぶ
 - ReplicaSet
     - ReplicationController （今後廃止）の後継
-    - 複数の Pods を管理
-    - Podの レプリカを生成し、指定した数の Pod を維持し続けるリソース（ **セルフヒーリング** ）
+    - 複数の Pod を管理
+    - Pod の レプリカを生成し、指定した数の Pod を維持し続けるリソース（ **セルフヒーリング** ）
     - 監視は、特定の **Label** がつけられた Pod の数をカウントする形で実現
-        - レプリカ数が不足している場合は template から Pod を生成し、レプリカ数が過剰な場合は Label にマッチする Pod のうち1つを削除
+        - レプリカ数が不足している場合は **template** から Pod を生成し、レプリカ数が過剰な場合は Label にマッチする Pod のうち1つを削除
     - selector をサポートする点において ReplicationController と異なる
     - set-based selector
     - ReplicaSet の特殊な形として「 DaemonSet 」「 StatefulSet 」がある
 - Deployments
-    - Pods と ReplicaSet を一括で管理する ReplicaSet の上位互換
+    - Pod と ReplicaSet を一括で管理する ReplicaSet の上位互換
     - Deployment は複数の ReplicaSet を管理することで、ローリングアップデートやロールバックなどを実現可能にするリソース
     - `kubectl` でリソース管理する際、基本的には ReplicaSet を直接操作することはなく Deployment を操作する
 - Job
@@ -114,7 +114,7 @@ Pod の管理・制御を行うリソース（オブジェクト）を **コン�
 Service は以下の種類の L4 ロードバランサを提供する。
 
 - ClusterIP
-    - k8s クラスタ内からのみ疎通可能な Service （なので、「Cluster」IP
+    - k8s **クラスタ内からのみ疎通可能** な Service （なので、「Cluster」IP
         - k8s クラスタ内でのみ疎通可能な仮想 IP
     - k8s クラスタ外から通信を受け付ける必要のない箇所のロードバランサ
     - 各ノードの `kube-proxy` 通信の転送を行う
@@ -174,7 +174,7 @@ Kubernetesでは、個別のコンテナに対する設定の内容は環境変�
 
 # マニフェストファイル
 
-参考：https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/
+参考：https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/
 
 ## Deployment
 
@@ -210,8 +210,6 @@ status: // DeploymentStatus // あまりわからない、、、
 ```
 
 ## Service
-
-## Deployment
 
 ```yaml
 apiVersion: v1

@@ -6,15 +6,12 @@ id: k8s-manifest-basics
 draft: true
 ---
 
-kubernetes では `kubectl` に様々コマンドがあるが、基本的には `kubectl create/delete/apply` コマンドと **マニフェスト** とよぶ YAML/JSON ファイルを使用することで、リソースの作成/削除/更新できる。マニフェストのリファレンスは [ここ](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.14/) 。
+kubernetes では `kubectl` に様々コマンドがあるが、基本的には `kubectl create/delete/apply` コマンドと **マニフェスト** とよぶ YAML/JSON ファイルを使用することで、リソースの作成/削除/更新できる。マニフェストのリファレンスは [ここ](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/) 。
 
 - マニフェストの雛形
 - マニフェストの理解
 
 # マニフェストの雛形
-
-- https://qiita.com/tkusumi/items/4f63cea4c4d910b368c4
-- https://qiita.com/bgpat/items/173f33ae2a9e21b24487
 
 ドライラン（ `kubectl run/create --dry-run` ）と yaml 表示（ `-o yaml` を）組み合わせるとマニフェストの雛形を標準出力できる。
 
@@ -108,3 +105,34 @@ kind: Service
 
 また、複数のマニフェストファイルを一気に適用したい場合は、ディレクトリにまとめ `-f` で指定して実行することができる。  
 その歳、ファイル名辞書順で実行されることに注意。
+
+## Label と Annotation
+
+両者とも key-value 形式（ `key: value` ）でデータを保持する仕組みであるが、用途が異なる。
+
+### Label
+
+- 各リソースの `metadata` で設定する
+- あるリソースが 1 つ以上のリソースを管理する場合、 `selector` にて Label を指定することにより対象リソースを発見する
+  - ReplicaSet が Pod を管理する場合
+  - Deployment が ReplicaSet を管理する場合
+  - Service が受けた通信の転送先 Pod を指定する場合、など
+
+### Annotation
+
+- リソースオブジェクトに関する不特定の情報を保存する方法
+  - オブジェクトの変更理由の記録
+  - 特別なスケジューラへの、特別なスケジュールポリシーの伝達
+  - リソースを更新したツールと、それがどのように更新したかの情報の付加
+  - 他のツールからの更新検知などのため
+  - Deployment オブジェクトによるロールアウトのための、ReplicaSet の追跡情報の保存、など
+
+## namespace
+
+namespace は k8s クラスタ上で論理的にシステムを分割する仕組み。  
+namespace リソース（ `kind: Namespace` ）を作成し、各リソースの `metadata` にラベル付け（ `namespace: test` ）して利用する。
+
+# 参考
+
+- [Kubernetes Tips: kubectl でマニフェストの雛形を作る](https://qiita.com/tkusumi/items/4f63cea4c4d910b368c4)
+- [Kubernetes流YAML職人になるために](https://qiita.com/bgpat/items/173f33ae2a9e21b24487)
