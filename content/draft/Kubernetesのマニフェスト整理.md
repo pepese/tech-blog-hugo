@@ -161,26 +161,32 @@ metadata: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/
   selfLink: # このオブジェクトを表すURL。読み取り専用。
   uid: # このオブジェクトの一意な ID 。システムにより管理される。
 spec: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#deploymentspec-v1-apps
-  minReadySeconds:
-  paused:
-  progressDeadlineSeconds:
-  replicas:
-  revisionHistoryLimit:
+  minReadySeconds: # コンテナがクラッシュすることなく、新しく作成されたポッドの準備が整うまでの最小秒数。デフォルト 0 。
+  paused: bool # 展開が一時停止されていることを示す。
+  progressDeadlineSeconds: # 展開が失敗したと見なされるまで最大秒数。
+  replicas: # Pod のリプリケーション数。
+  revisionHistoryLimit: # ロールバックを許可するReplicaSetの世代数。デフォルト 10 。
   selector: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#labelselector-v1-meta
+            # ReplicaSet が Pod を選択するための Label Selector 。
     matchExpressions: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#labelselectorrequirement-v1-meta
-    matchLabels:
+                      # Label Selector のリスト。 AND で評価される。
+    matchLabels: # key-value 形式の Label Selector のリスト。 AND で評価される。matchExpressions の方が複雑な表現が可能。
   strategy: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#deploymentstrategy-v1-apps
+            # 新しいポッドに置き換えるため展開戦略。現状は単純な再配置とローリングアップデートのみ。
     rollingUpdate: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#rollingupdatedeployment-v1-apps
-      maxSurge:
-      maxUnavailable:
-    type:
+      maxSurge: # Pod のレプリケーション数を超えて作成できるコンテナの最大数。数か割合で表現。
+      maxUnavailable: # Pod のレプリケーション数を下回って利用できなくする最大数。数か割合で表現。
+    type: # Recreate か RollingUpdate 。デフォルト RollingUpdate 。
   template: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#podtemplatespec-v1-core
-    metadata:
+            # 作成する Pod の定義
+    metadata: # 先の metadata に同じ。
     spec: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#podspec-v1-core
-      activeDeadlineSeconds:
+      activeDeadlineSeconds: # Pod が非アクティブになってから強制終了されるまでの秒数。
       affinity: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#affinity-v1-core
-      automountServiceAccountToken:
+                # Pod をスケジューリングする際の制約。
+      automountServiceAccountToken: # サービスアカウントトークンを自動的にマウントする必要があるかどうかを示す。
       containers: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#container-v1-core
+                  # Pod に属するコンテナのリスト。
       dnsConfig: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#poddnsconfig-v1-core
       dnsPolicy:
       enableServiceLinks:
@@ -211,20 +217,33 @@ spec: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#dep
       volumes: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#volume-v1-core
 ```
 
-上記、すごい量だが、結局意識するのは以下だけ。
+上記、すごい量だが、必要最低限は。
 
 ```
 apiVersion: app/v1
 kind: Deployment
 metadata:
   annotations:
-    key: value
+    <key>: <value>
   labels:
-    key: value
-  name:
-  namespace:
+    <key>: <value>
+  name: <string>
+  namespace: <string>
 spec:
+  replicas: <integer>
+  selector:
+    matchLabels:
+      <key>: <value>
+  template:
+    metadata:
+    spec:
+      containers: 詳細調査これから！！
 ```
+
+ケースによっては追加で以下を意識する必要がある。
+
+- spec.strategy
+- spec.template.spec.affinity : [参考](https://qiita.com/sheepland/items/ed12b3dc4a8f1df7c4ec)
 
 # 参考
 
