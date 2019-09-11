@@ -132,6 +132,100 @@ kind: Service
 namespace は k8s クラスタ上で論理的にシステムを分割する仕組み。  
 namespace リソース（ `kind: Namespace` ）を作成し、各リソースの `metadata` にラベル付け（ `namespace: test` ）して利用する。
 
+## Deployment
+
+リソースには色々あるが、理解すべきリソースは少ない。そのうちの一つ。  
+（その他は、Service、DaemonSet、CronJobくらい？）
+
+```
+apiVersion: app/v1
+kind: Deployment
+metadata: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#objectmeta-v1-meta
+  annotations: # 任意のメタデータを保存および取得する。外部ツールなどによって設定・変更・保存される箇所でもある。
+    key: value
+  clusterName: string # オブジェクトが所属するクラスタ名。異なるクラスターで同じ名前と名前空間を持つリソースを区別するために使用。使わない。
+  creationTimestamp: # このオブジェクトが作成されたサーバ時間。変更できない。
+  deletionGracePeriodSeconds: # オブジェクトの正常終了までの時間。読み取り専用。
+  deletionTimestamp: # オブジェクトが削除される時間。読み取り専用。
+  finalizers: # リストからエントリを削除する責任のあるコンポーネントの識別子。削除のみ可能。
+  generateName: # name が設定されていない場合にのみオプションで設定される名前。
+  generation: # 状態の世代を表す。読み取り専用。
+  initializers: # オブジェクトの作成時にシステムの不変条件を強制するコントローラー。DEPRECATED。
+  labels: # ReplicaSet、Service の selector で利用。
+    key: value
+  managedFields: # 内部のワークフロー用でユーザは設定・理解の必要はない。
+  name: # namespace 内で一意なオブジェクトの名前。
+  namespace: # 名前空間名。空は default と同じ。 DNS_LABEL である必要があり、変更できない。
+  ownerReferences: # このオブジェクトに依存するオブジェクトのリスト。コントローラにより管理される。
+  resourceVersion: # オブジェクトがいつ変更されたかを判断するためにクライアントが使用できるこのオブジェクトの内部バージョン。読み取り専用。
+  selfLink: # このオブジェクトを表すURL。読み取り専用。
+  uid: # このオブジェクトの一意な ID 。システムにより管理される。
+spec: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#deploymentspec-v1-apps
+  minReadySeconds:
+  paused:
+  progressDeadlineSeconds:
+  replicas:
+  revisionHistoryLimit:
+  selector: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#labelselector-v1-meta
+    matchExpressions: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#labelselectorrequirement-v1-meta
+    matchLabels:
+  strategy: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#deploymentstrategy-v1-apps
+    rollingUpdate: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#rollingupdatedeployment-v1-apps
+      maxSurge:
+      maxUnavailable:
+    type:
+  template: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#podtemplatespec-v1-core
+    metadata:
+    spec: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#podspec-v1-core
+      activeDeadlineSeconds:
+      affinity: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#affinity-v1-core
+      automountServiceAccountToken:
+      containers: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#container-v1-core
+      dnsConfig: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#poddnsconfig-v1-core
+      dnsPolicy:
+      enableServiceLinks:
+      hostAliases: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#hostalias-v1-core
+      hostIPC:
+      hostNetwork:
+      hostPID:
+      hostname:
+      imagePullSecrets: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#localobjectreference-v1-core
+      initContainers: #
+      nodeName:
+      nodeSelector:
+      overhead:
+      preemptionPolicy:
+      priority:
+      priorityClassName:
+      readinessGates: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#podreadinessgate-v1-core
+      restartPolicy:
+      runtimeClassName:
+      schedulerName:
+      securityContext: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#podsecuritycontext-v1-core
+      serviceAccount:
+      serviceAccountName:
+      shareProcessNamespace:
+      subdomain:
+      terminationGracePeriodSeconds:
+      tolerations: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#toleration-v1-core
+      volumes: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#volume-v1-core
+```
+
+上記、すごい量だが、結局意識するのは以下だけ。
+
+```
+apiVersion: app/v1
+kind: Deployment
+metadata:
+  annotations:
+    key: value
+  labels:
+    key: value
+  name:
+  namespace:
+spec:
+```
+
 # 参考
 
 - [Kubernetes Tips: kubectl でマニフェストの雛形を作る](https://qiita.com/tkusumi/items/4f63cea4c4d910b368c4)
