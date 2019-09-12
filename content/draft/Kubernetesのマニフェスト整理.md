@@ -187,34 +187,64 @@ spec: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#dep
       automountServiceAccountToken: # サービスアカウントトークンを自動的にマウントする必要があるかどうかを示す。
       containers: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#container-v1-core
                   # Pod に属するコンテナのリスト。
+        args: # ENTRYPOINT へ引数。
+        command: # ENTRYPOINT 配列。
+        env: # 環境変数のリスト。
+        envFrom: # 環境変数を設定するソースのリスト。
+        image: # Docker イメージ名。
+        imagePullPolicy: # Docker イメージの pull ポリシー。 Always, Never, IfNotPresent のいずれか。
+        lifecycle: # コンテナのライフサイクルイベントに応じて管理システムが実行するアクション。
+        livenessProbe: # コンテナ死活の定期的な調査。
+        name: # コンテナ名。DNS_LABEL となる。
+        ports: # コンテナの公開ポートのリスト。
+        readinessProbe: # コンテナサービスの準備状況の定期的な調査。
+        resources: # コンテナが利用するコンピュートリソース。
+        securityContext: # Pod を実行するセキュリティオプション。
+        stdin: # コンテナがコンテナーランタイムで標準入力にバッファーを割り当てるかどうか。デフォルト false は EOF になる。
+        stdinOnce: # 単一の接続によって開かれた後に、コンテナランタイムがstdinチャネルを閉じるかどうか。デフォルト false 。
+        terminationMessagePath: # オプション：コンテナの終了メッセージが書き込まれるファイルがコンテナのファイルシステムにマウントされるパス。
+        terminationMessagePolicy: # 終了メッセージの入力方法。
+        tty: # コンテナに TTY を割り当てるか否か。デフォルト false 。
+        volumeDevices: # コンテナが使用するブロックデバイスのリスト。
+        volumeMounts: # コンテナのファイルシステムにマウントするポッドボリューム。
+        workingDir: # コンテナの作業ディレクトリ。
       dnsConfig: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#poddnsconfig-v1-core
-      dnsPolicy:
-      enableServiceLinks:
+        nameservers: # DNSネームサーバーのIPアドレスのリスト。
+        options: # DNSリゾルバーオプションのリスト。
+        searches: # ホスト名検索用のDNS検索ドメインのリスト。
+      dnsPolicy: # Pod の DNS ポリシー。ClusterFirstWithHostNet, ClusterFirst（デフォルト）, Default, None 。
+      enableServiceLinks: # サービスに関する情報をDockerリンクの構文と一致する Pod の環境変数に注入するか否か。デフォルト true 。
       hostAliases: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#hostalias-v1-core
-      hostIPC:
-      hostNetwork:
-      hostPID:
-      hostname:
+                   # Pod の hosts ファイルへの追加設定。
+      hostIPC: # ホストの IPC 名前空間を使うか否か。デフォルト false 。
+      hostNetwork: # Pod に要求されたホストネットワーキング。ホストのネットワーク名前空間を使用。デフォルト false 。
+      hostPID: # ホストの PID 名前空間を利用するか否か。デフォルト false 。
+      hostname: # Pod のホスト名。指定しない場合システムが付与。
       imagePullSecrets: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#localobjectreference-v1-core
-      initContainers: #
-      nodeName:
-      nodeSelector:
-      overhead:
-      preemptionPolicy:
-      priority:
-      priorityClassName:
+                        # Docker イメージを Pull する際のシークレット。
+      initContainers: # Pod に属する初期化コンテナのリスト。コンテナが開始される前に順番に実行される。
+      nodeName: # Pod を特定のノードへスケジューリングする。
+      nodeSelector: # Pod を配置するノードのセレクタ。
+      overhead: # 特定の RuntimeClass の Pod の実行に関連するリソースオーバーヘッドを表す。コントローラにより自動入力される。
+      preemptionPolicy: # 優先度の低い Pod を先取りするポリシー。
+      priority: # 優先度の値。値が大きいほど優先度が高い。
+      priorityClassName: # Pod の優先順位を示す。
       readinessGates: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#podreadinessgate-v1-core
-      restartPolicy:
-      runtimeClassName:
-      schedulerName:
+                      # Pod の準備状況を評価する。
+      restartPolicy: # Pod 内の全てのコンテナの再起動ポリシー。
+      runtimeClassName: # Pod 実行に使用する RuntimeClass オブジェクト。
+      schedulerName: # Pod を管理するスケジューラ。
       securityContext: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#podsecuritycontext-v1-core
-      serviceAccount:
-      serviceAccountName:
-      shareProcessNamespace:
-      subdomain:
-      terminationGracePeriodSeconds:
+                       # Pod レベルのセキュリティ属性。
+      serviceAccount: # Deprecated
+      serviceAccountName: # Pod の実行に使用する ServiceAccount 名。
+      shareProcessNamespace: # Pod 内の全てのコンテナ間で PID 空間を共有する。デフォルト false 。
+      subdomain: # サブドメインを指定する。"<hostname>.<subdomain>.<pod namespace>.svc.<cluster domain>" 。
+      terminationGracePeriodSeconds: Pod が Graceful Stop するのに要する秒数。デフォルト 30 秒。
       tolerations: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#toleration-v1-core
+                   # Pod を特定のノードに配置する際に利用。 nodeSelector の方が古い。
       volumes: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#volume-v1-core
+               # マウントできるボリュームのリスト。
 ```
 
 上記、すごい量だが、必要最低限は。
@@ -237,13 +267,39 @@ spec:
   template:
     metadata:
     spec:
-      containers: 詳細調査これから！！
+      containers:
+        image: <string>
+        name: <string>
+        ports:
+        resources: {}
 ```
 
 ケースによっては追加で以下を意識する必要がある。
 
 - spec.strategy
 - spec.template.spec.affinity : [参考](https://qiita.com/sheepland/items/ed12b3dc4a8f1df7c4ec)
+
+## Service
+
+```
+apiVersion: v1
+kind: Service
+metadata: # 先の metadata に同じ。
+spec: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#servicespec-v1-core
+  clusterIP:
+  externalIPs:
+  externalName:
+  externalTrafficPolicy:
+  healthCheckNodePort:
+  loadBalancerIP:
+  loadBalancerSourceRanges:
+  ports:
+  publishNotReadyAddresses:
+  selector:
+  sessionAffinity:
+  sessionAffinityConfig:
+  type: # ExternalName 、 ClusterIP （デフォルト）、 NodePort 、および LoadBalancer 。
+```
 
 # 参考
 

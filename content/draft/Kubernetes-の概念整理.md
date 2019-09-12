@@ -120,6 +120,7 @@ Service は以下の種類の L4 ロードバランサを提供する。
     - 各 Pod は IP を持つが個々にアクセスしていては負荷分散できないのでそれを 1 つの IP に束ねる
     - name がホスト名として機能し、 DNS により名前解決される
         - `<name>.<namespace>.svc.cluster.local`
+        - `svc` は Service の略
     - 各ノードの `kube-proxy` 通信の転送を行う
     - type は `ClusterIP`
 - ExternalIP
