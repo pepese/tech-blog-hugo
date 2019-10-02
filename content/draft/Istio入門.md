@@ -69,6 +69,103 @@ $ kubectl get crds | grep 'istio.io' | wc -l
       23
 ```
 
+# 解説
+
+```bash
+.
+├── README.md
+├── helmfile.yaml
+└── istio
+    └── values.yaml
+```
+
+```yaml:helmfile.yaml
+repositories:
+  - name: elastic
+    url: https://helm.elastic.co
+  - name: kiwigrid
+    url: https://kiwigrid.github.io
+  - name: codecentric
+    url: https://codecentric.github.io/helm-charts
+
+releases:
+  # 前提として、istio-init が完了している必要がある
+  # https://github.com/istio/istio/tree/master/install/kubernetes/helm/istio
+  - name: istio
+    namespace: istio-system
+    chart: istio.io/istio
+    values:
+    - ./istio/values.yaml
+```
+
+```yaml:istio/value.yaml
+gateways:
+  enabled: true
+  istio-ingressgateway:
+    type: NodePort
+
+global:
+  proxy:
+    autoInject: disabled
+
+grafana:
+  enabled: true
+  ingress:
+    enabled: true
+    hosts:
+      - istio-grafana.sample.com
+  contextPath: /
+  security:
+    enabled: true
+
+kiali:
+  enabled: true
+  ingress:
+    enabled: true
+    hosts:
+      - istio-kiali.sample.com
+  dashboard:
+    jaegerURL: https://istio-jaeger.sample.com
+  createDemoSecret: true
+
+tracing:
+  enabled: true
+  ingress:
+    enabled: true
+    hosts:
+      - istio-jaeger.sample.com
+  contextPath: /
+  jaeger:
+    persist: true
+    accessMode: ReadWriteOnce
+```
+
+Helm から構築する Istio は、 Istio では飽き足らず、様々な機能を構築することが可能。
+
+- certmanager
+  - TLSの証明書を自動で生成し管理するK8sのアドオン
+- galley
+  - Istio のコンポーネント
+- gateways
+  - Istio のコンポーネント
+  - Istio Ingress Gateway
+- global
+- grafana
+- istio_cni
+- istiocoredns
+- kiali
+- mixer
+  - Istio のコンポーネント
+- nodeagent
+- pilot
+  - Istio のコンポーネント
+- prometheus
+- security
+- sidecarInjectorWebhook
+- tracing
+
+設定については [ここ](https://istio.io/docs/reference/config/installation-options/) を参照。
+
 # 参考
 
 - Istio 公式
