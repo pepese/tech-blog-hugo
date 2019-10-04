@@ -29,7 +29,7 @@ Homebrew で構築できるものは以下。
 ```bash
 $ brew install awscli
 $ brew install terraform
-$ brew install kubernetes-cli # docker for mac が入ってる場合は不要
+$ brew install kubernetes-cli
 $ brew install kubernetes-helm
 $ brew install helmfile
 $ helm plugin install https://github.com/databus23/helm-diff --version master
@@ -67,7 +67,76 @@ kube-system   replicaset.apps/tiller-deploy-7695cdcfb8   1         1         1  
 $ helm install ~/istio-1.3.1/install/kubernetes/helm/istio-init --name istio-init --namespace istio-system
 $ kubectl get crds | grep 'istio.io' | wc -l
       23
+$ helm ls --all                              # 確認２
+NAME      	REVISION	UPDATED                 	STATUS  	CHART           	APP VERSION	NAMESPACE
+istio-init	1       	Thu Oct  3 21:02:53 2019	DEPLOYED	istio-init-1.3.1	1.3.1      	istio-system
 ```
+
+## Istio の構築
+
+```bash
+$ helm install ~/istio-1.3.1/install/kubernetes/helm/istio --name istio --namespace istio-system \
+    --values ~/istio-1.3.1/install/kubernetes/helm/istio/values-istio-demo.yaml # Istio 構築
+$ helm install ~/istio-1.3.1/install/kubernetes/helm/istio --name istio --namespace istio-system # Istio 構築
+$ kubectl label namespace default istio-injection=enabled                       # サイドカーを自動でつける設定
+$ kubectl get namespace -L istio-injection                                      # 確認
+$ kubectl apply -f <your-application>.yaml                                      # アプリのデプロイ
+```
+
+### Prometheus
+
+```bash
+$ kubectl -n istio-system get pod -l app=prometheus                          # Pod 名を確認
+NAME                          READY   STATUS    RESTARTS   AGE
+prometheus-776fdf7479-zhqbc   1/1     Running   0          7m15s
+$ kubectl -n istio-system get svc -l app=prometheus                          # ポートを確認
+NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+prometheus   ClusterIP   172.20.55.63   <none>        9090/TCP   12m
+$ kubectl -n istio-system port-forward prometheus-776fdf7479-zhqbc 9090:9090 # port forward
+$ curl http://localhost:9090                                                 # ブラウザでアクセス
+```
+
+一撃だと `$ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=prometheus -o jsonpath='{.items[0].metadata.name}') 9090:9090` 。
+
+### Grafana
+
+```bash
+$ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000:3000
+$ curl http://localhost:3000/dashboard/db/istio-mesh-dashboard
+```
+
+### Kiali
+
+まずはユーザ/パスワードを作成して secret を適用する。
+
+```bash
+$ KIALI_USERNAME=$(read -p 'Kiali Username: ' uval && echo -n $uval | base64)
+Kiali Username: # ユーザ名を入力する
+$ KIALI_PASSPHRASE=$(read -p 'Kiali Passphrase: ' pval && echo -n $pval | base64)
+Kiali Passphrase: # パスワードを入力する
+$ cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kiali
+  namespace: istio-system
+  labels:
+    app: kiali
+type: Opaque
+data:
+  username: $KIALI_USERNAME
+  passphrase: $KIALI_PASSPHRASE
+EOF
+```
+
+以下でアクセスして、上記で作成したユーザ/パスワードを利用する。
+
+```bash
+$ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=kiali -o jsonpath='{.items[0].metadata.name}') 20001:20001
+$ curl http://localhost:20001/kiali/console
+```
+
+なんかログインできない、、、
 
 # 解説
 
@@ -75,8 +144,7 @@ $ kubectl get crds | grep 'istio.io' | wc -l
 .
 ├── README.md
 ├── helmfile.yaml
-└── istio
-    └── values.yaml
+└── istio-values.yaml
 ```
 
 ```yaml:helmfile.yaml
@@ -95,10 +163,10 @@ releases:
     namespace: istio-system
     chart: istio.io/istio
     values:
-    - ./istio/values.yaml
+    - istio-values.yaml
 ```
 
-```yaml:istio/value.yaml
+```yaml:istio-value.yaml
 gateways:
   enabled: true
   istio-ingressgateway:
