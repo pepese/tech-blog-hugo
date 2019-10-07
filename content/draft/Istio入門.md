@@ -138,6 +138,26 @@ $ curl http://localhost:20001/kiali/console
 
 なんかログインできない、、、
 
+### Istio Ingress Gateway
+
+従来、Kubernetes は外部からクラスタに入るトラフィックを処理するために **Ingress Controller** 使用していた。Istioを使用する場合、これはもはや当てはまない。  
+Istio は、使い慣れた Ingress リソースを新しい Gateway および VirtualServices リソースに置き換えた。  
+これらは連携して動作し、トラフィックをメッシュにルーティングする。  
+メッシュ内では、サービスはクラスタローカルサービス名で相互にアクセスできるため、ゲートウェイは必要ない。  
+以下のように動作する。
+
+<img src="https://blog.jayway.com/wp-content/uploads/2018/10/istio-networking.png" />
+
+1. クライアントは特定のポートにリクエストを発行する
+2. LoadBalancer がクラスタ内の woker node へトラフィックをフォワードする
+  - ここでの LoadBalancer は状況（ IP が必要 or Nor ）によって NodePort でもよい
+    - 例えば AWS の Autoscaling Group だと IP は意識しなくていいので NodePort でよい
+  - Istio IngressGateway へトラフィックを流すためだけの役割で、手動もしくは自動で設定する
+3. Istio IngressGateway の Service/Deployment(Pod) が LoadBalancer からのリクエストを受ける
+4. Istio IngressGateway の Pod が Gateway および VirtualService の設定に応じてリクエストを処理する
+  - Gateway では、ポート、プロトコル、および証明書の設定を行う
+  - VirtualService は、 Service へリクエストをルーティングするための設定を行う
+
 # 解説
 
 ```bash
@@ -245,3 +265,5 @@ Helm から構築する Istio は、 Istio では飽き足らず、様々な機�
   - [Istio導入のメリットとハマりどころを、実例に学ぶ〜マイクロサービス化の先にある課題を解決する](https://employment.en-japan.com/engineerhub/entry/2019/05/21/103000)
   - [Istio IngressGateway周辺を理解する](https://qiita.com/J_Shell/items/296cd00569b0c7692be7)
   - [サービスメッシュを実現するIstioをEKS上で動かす - その4 データの可視化について](https://tech.recruit-mp.co.jp/infrastructure/post-19190/)
+  - [Istio 1.0 を試してみた！](https://medium.com/google-cloud-jp/istio-1-0-%E3%82%92%E8%A9%A6%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F-d74f75eeb1b1)
+  - [Understanding Istio Ingress Gateway in Kubernetes](https://blog.jayway.com/2018/10/22/understanding-istio-ingress-gateway-in-kubernetes/)
