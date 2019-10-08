@@ -16,11 +16,13 @@ draft: true
 
 [参考](https://www.1915keke.com/entry/2018/10/06/042621)
 
-- `Pilot` : サービスディスカバリと高度なトラフィックマネジメント(A/Bテスト、カナリアデプロイなど)を提供する。
-- `Proxy` : Envoy Proxyを使ってSidecarとしてデプロイをしている。
-- `Mixer` : プラットフォームに依存するもの。アクセスコントロールやサービスメッシュに渡る制御をしたり、それぞれのEnvoyやサービスからテレメトリーを収集する。
-- `Citadal`: サービス間とエンドユーザー認証を行う。
-- `Galley` : Control Planeを代表してユーザー認証されたIstio APIを提供する。
+- Control Plane
+  - `Mixer` : Envoy を通して各サービスのデータを収集し、その情報を元にアクセスコントロールやサービスメッシュに渡る制御を行う。
+  - `Pilot` : サービスディスカバリと高度なトラフィックマネジメント(A/Bテスト、カナリアデプロイなど)を提供する。
+  - `Galley` : Control Planeを代表してユーザー認証されたIstio APIを提供する。
+  - `Citadel`: サービス間とエンドユーザー認証を行う。
+- Data Plane
+  - `Proxy` : Envoy を使って レイヤー4/7 のイン・アウト両方のサービスメッシュを提供し、 Pod に Sidecarとしてインジェクションされる。
 
 # ローカル環境構築
 
@@ -83,6 +85,10 @@ $ kubectl get namespace -L istio-injection                                      
 $ kubectl apply -f <your-application>.yaml                                      # アプリのデプロイ
 ```
 
+上記では default namespace に `istio-injection=enabled` ラベルを付与して自動でサイドカー（ envoy ）インジェクションするように設定している。  
+なお、自動でサイドカーインジェクションされるための条件は [ここ](https://istio.io/docs/ops/setup/injection-concepts/) 。
+
+
 ### Prometheus
 
 ```bash
@@ -101,13 +107,14 @@ $ curl http://localhost:9090                                                 # �
 ### Grafana
 
 ```bash
-$ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000:3000
+$ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000:3000 # port forward
 $ curl http://localhost:3000/dashboard/db/istio-mesh-dashboard
 ```
 
 ### Kiali
 
-まずはユーザ/パスワードを作成して secret を適用する。
+まずはユーザ/パスワードを作成して secret を適用する。  
+（`createDemoSecret: true` に設定した場合、 ID/Pass は admin/admin ）
 
 ```bash
 $ KIALI_USERNAME=$(read -p 'Kiali Username: ' uval && echo -n $uval | base64)
@@ -132,11 +139,9 @@ EOF
 以下でアクセスして、上記で作成したユーザ/パスワードを利用する。
 
 ```bash
-$ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=kiali -o jsonpath='{.items[0].metadata.name}') 20001:20001
+$ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=kiali -o jsonpath='{.items[0].metadata.name}') 20001:20001 # port forward
 $ curl http://localhost:20001/kiali/console
 ```
-
-なんかログインできない、、、
 
 ### Istio Ingress Gateway
 
@@ -154,9 +159,12 @@ Istio は、使い慣れた Ingress リソースを新しい Gateway および V
     - 例えば AWS の Autoscaling Group だと IP は意識しなくていいので NodePort でよい
   - Istio IngressGateway へトラフィックを流すためだけの役割で、手動もしくは自動で設定する
 3. Istio IngressGateway の Service/Deployment(Pod) が LoadBalancer からのリクエストを受ける
+  - Istio IngressGateway は type を LoadBalancer/NodePort/ClusterIP から選択できるため、 NodePort として前段の LoadBalancer を省略することもできる
 4. Istio IngressGateway の Pod が Gateway および VirtualService の設定に応じてリクエストを処理する
   - Gateway では、ポート、プロトコル、および証明書の設定を行う
-  - VirtualService は、 Service へリクエストをルーティングするための設定を行う
+  - VirtualService は、 アプリケーションの Service へリクエストをルーティングするための設定を行う
+
+Istio IngressGateway の他に **Istio EgressGateway** （外部への HTTP(S) 通信用）、 **Istio IblGateway** （クラスタ内 HTTP(S)/gRPC 通信用）が利用できる。
 
 # 解説
 
@@ -259,11 +267,14 @@ Helm から構築する Istio は、 Istio では飽き足らず、様々な機�
 - Istio 公式
   - [helm 利用](https://istio.io/docs/setup/install/helm/)
   - [Installation Options](https://istio.io/docs/reference/config/installation-options/)
-- 参考
+- 全般理解
+  - [Istioの全貌](https://thinkit.co.jp/article/14640?page=0%2C1)
+- 設定理解
   - [マイクロサービスアーキテクチャ向けにサービスメッシュを提供する「Istio」の概要と環境構築、トラフィックルーティング設定](https://knowledge.sakura.ad.jp/20489/)
-  - [Istio入門 その1 -Istioとは?-](https://qiita.com/Ladicle/items/979d59ef0303425752c8)
-  - [Istio導入のメリットとハマりどころを、実例に学ぶ〜マイクロサービス化の先にある課題を解決する](https://employment.en-japan.com/engineerhub/entry/2019/05/21/103000)
-  - [Istio IngressGateway周辺を理解する](https://qiita.com/J_Shell/items/296cd00569b0c7692be7)
-  - [サービスメッシュを実現するIstioをEKS上で動かす - その4 データの可視化について](https://tech.recruit-mp.co.jp/infrastructure/post-19190/)
   - [Istio 1.0 を試してみた！](https://medium.com/google-cloud-jp/istio-1-0-%E3%82%92%E8%A9%A6%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F-d74f75eeb1b1)
+- Istio IngressGateway
   - [Understanding Istio Ingress Gateway in Kubernetes](https://blog.jayway.com/2018/10/22/understanding-istio-ingress-gateway-in-kubernetes/)
+  - [Istio IngressGateway周辺を理解する](https://qiita.com/J_Shell/items/296cd00569b0c7692be7)
+  - [Istio導入のメリットとハマりどころを、実例に学ぶ〜マイクロサービス化の先にある課題を解決する](https://employment.en-japan.com/engineerhub/entry/2019/05/21/103000)
+- 可視化
+  - [サービスメッシュを実現するIstioをEKS上で動かす - その4 データの可視化について](https://tech.recruit-mp.co.jp/infrastructure/post-19190/)
