@@ -56,11 +56,8 @@ k8s クラスタは構築されている前提。
 ```bash
 $ kubectl apply -f ~/istio-1.3.1/install/kubernetes/helm/helm-service-account.yaml # tiller の Service Account 作成
 $ helm init --history-max 200 --service-account tiller                             # tiller の作成
-$ kubectl get all --all-namespaces -o wide | grep tiller                           # tiller の構築を確認
-kube-system   pod/tiller-deploy-7695cdcfb8-2xf4l   1/1     Running   0          40s    10.0.65.144   ip-10-0-65-119.ap-northeast-1.compute.internal   <none>           <none>
-kube-system   service/tiller-deploy   ClusterIP   172.20.27.245   <none>        44134/TCP       40s    app=helm,name=tiller
-kube-system   deployment.apps/tiller-deploy   1/1     1            1           40s    tiller       gcr.io/kubernetes-helm/tiller:v2.14.3                                  app=helm,name=tiller
-kube-system   replicaset.apps/tiller-deploy-7695cdcfb8   1         1         1       40s    tiller       gcr.io/kubernetes-helm/tiller:v2.14.3                                  app=helm,name=tiller,pod-template-hash=7695cdcfb8
+$ kubectl get all --all-namespaces -o wide | grep tiller | wc -l                   # tiller の構築を確認
+       4
 ```
 
 ## istio-init
@@ -78,11 +75,11 @@ istio-init	1       	Thu Oct  3 21:02:53 2019	DEPLOYED	istio-init-1.3.1	1.3.1    
 
 ```bash
 $ helm install ~/istio-1.3.1/install/kubernetes/helm/istio --name istio --namespace istio-system \
-    --values ~/istio-1.3.1/install/kubernetes/helm/istio/values-istio-demo.yaml # Istio 構築
+      --values ~/istio-1.3.1/install/kubernetes/helm/istio/values-istio-demo.yaml # Istio 構築
 $ helm install ~/istio-1.3.1/install/kubernetes/helm/istio --name istio --namespace istio-system # Istio 構築
-$ kubectl label namespace default istio-injection=enabled                       # サイドカーを自動でつける設定
-$ kubectl get namespace -L istio-injection                                      # 確認
-$ kubectl apply -f <your-application>.yaml                                      # アプリのデプロイ
+$ kubectl label namespace default istio-injection=enabled                         # サイドカーを自動でつける設定
+$ kubectl get namespace -L istio-injection                                        # 確認
+$ kubectl apply -f <your-application>.yaml                                        # アプリのデプロイ
 ```
 
 上記では default namespace に `istio-injection=enabled` ラベルを付与して自動でサイドカー（ envoy ）インジェクションするように設定している。  
@@ -244,21 +241,34 @@ Helm から構築する Istio は、 Istio では飽き足らず、様々な機�
   - Istio のコンポーネント
 - gateways
   - Istio のコンポーネント
-  - Istio Ingress Gateway
+  - Istio IngressGateway/IblGateway/EgressGateway
 - global
+  - Istio の共通設定
 - grafana
+  - 可視化ツール、 Prometheus とともに
 - istio_cni
+  - CNI (Container Network Interface) の設定
 - istiocoredns
+  - Istio サービスの namespace で利用できるDNS の設定
+  - kube-dns (CoreDNS) のサブドメインとして可動させたりできる
 - kiali
+  - リクエストのトレースを行う
 - mixer
   - Istio のコンポーネント
 - nodeagent
+  - ノード単位のセキュリティ機能・設定を提供するエージェント
 - pilot
   - Istio のコンポーネント
 - prometheus
+  - メトリクス監視ツール
 - security
+  - セキュリティの設定
 - sidecarInjectorWebhook
+  - [Admission Controllers](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/) という kube-api コールの際のインターセプト機能を利用
+  - [Automatic sidecar injection](https://istio.io/docs/setup/additional-setup/sidecar-injection/#automatic-sidecar-injection) を実現する
 - tracing
+  - リクエストのレイテンシを追跡する
+  - Jeager
 
 設定については [ここ](https://istio.io/docs/reference/config/installation-options/) を参照。
 

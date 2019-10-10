@@ -188,7 +188,7 @@ $ helm package sample-chart # パッケージング
 
 各ディレクトリ・ファイルは以下の役割。
 
--  `Chart.yaml` ：Chartの名前やバージョンなどの情報が記述される。
+- `Chart.yaml` ：Chartの名前やバージョンなどの情報が記述される。
 - `values.yaml` ：Chartのパラメータのデフォルト値が記述されまる。
 - `charts/` ：このChartが依存している別のChartを保存する。
 - `templates/`
@@ -200,9 +200,11 @@ $ helm package sample-chart # パッケージング
 なお、テンプレートはほぼ go の `text/template` で記載する。  
 やり方の超概要は以下。
 
-1. 自分で作成したマニフェストをテンプレート化して `templates/` 配下に置く。
-2. 環境差分毎に `values.yaml` （ `values.dev.yaml` とか `values.prd.yaml` とか ）を作る
-3. 適用する（ `$ helm install -f values.yaml sample-chart` ）
+1. `helm create`
+2. `template/*` と values.yaml を削除する
+3. 自分で作成したマニフェストをテンプレート化して `templates/` 配下に置く
+4. 環境差分毎に `values.yaml` （ `values.dev.yaml` とか `values.prd.yaml` とか ）を作る
+5. 適用する（ `$ helm install -f values.yaml sample-chart` ）
 
 ### テンプレートの書き方
 
