@@ -71,7 +71,7 @@ NAME      	REVISION	UPDATED                 	STATUS  	CHART           	APP VERSI
 istio-init	1       	Thu Oct  3 21:02:53 2019	DEPLOYED	istio-init-1.3.1	1.3.1      	istio-system
 ```
 
-## Istio の構築
+## Istio の構築（デモ版）
 
 ```bash
 $ helm install ~/istio-1.3.1/install/kubernetes/helm/istio --name istio --namespace istio-system \
@@ -83,7 +83,12 @@ $ kubectl apply -f <your-application>.yaml                                      
 ```
 
 上記では default namespace に `istio-injection=enabled` ラベルを付与して自動でサイドカー（ envoy ）インジェクションするように設定している。  
+サイドカーインジェクションを有効にしたいネームスペースには `istio-injection=enabled` ラベルを付与すべし。  
 なお、自動でサイドカーインジェクションされるための条件は [ここ](https://istio.io/docs/ops/setup/injection-concepts/) 。
+
+以降、helm で構築された Istio 以外の主要コンポーネントについて確認していく。  
+なお、管理画面へのアクセスは `port-forward` を利用する。  
+セキュリティが気になる人は [kauthproxy](https://github.com/int128/kauthproxy) のようなものを利用してもいいかもしれない。
 
 
 ### Prometheus
@@ -157,13 +162,55 @@ Istio は、使い慣れた Ingress リソースを新しい Gateway および V
   - Istio IngressGateway へトラフィックを流すためだけの役割で、手動もしくは自動で設定する
 3. Istio IngressGateway の Service/Deployment(Pod) が LoadBalancer からのリクエストを受ける
   - Istio IngressGateway は type を LoadBalancer/NodePort/ClusterIP から選択できるため、 NodePort として前段の LoadBalancer を省略することもできる
-4. Istio IngressGateway の Pod が Gateway および VirtualService の設定に応じてリクエストを処理する
+4. Istio IngressGateway の Pod が **Gateway** および **VirtualService** の設定に応じてリクエストを処理する
   - Gateway では、ポート、プロトコル、および証明書の設定を行う
   - VirtualService は、 アプリケーションの Service へリクエストをルーティングするための設定を行う
 
-Istio IngressGateway の他に **Istio EgressGateway** （外部への HTTP(S) 通信用）、 **Istio IblGateway** （クラスタ内 HTTP(S)/gRPC 通信用）が利用できる。
+Istio IngressGateway の他に **Istio EgressGateway** （外部への HTTP(S) 通信用）、 **Istio IblGateway** （クラスタ内 HTTP(S)/gRPC 通信用）が利用できる。  
+なお、 クラスタ外部サービス（ API や DB ）へのアクセスは **ServiceEntry** を設定しなければアクセスできない。（ [参考](https://tech.recruit-mp.co.jp/infrastructure/post-19184/) ）
 
 # 解説
+
+Helm から構築する Istio は、 Istio では飽き足らず、様々な機能を構築することが可能。
+
+- certmanager
+  - TLSの証明書を自動で生成し管理するK8sのアドオン
+- galley
+  - Istio のコンポーネント
+- gateways
+  - Istio のコンポーネント
+  - Istio IngressGateway/IblGateway/EgressGateway
+- global
+  - Istio の共通設定
+- grafana
+  - 可視化ツール、 Prometheus とともに
+- istio_cni
+  - CNI (Container Network Interface) の設定
+- istiocoredns
+  - Istio サービスの namespace で利用できるDNS の設定
+  - kube-dns (CoreDNS) のサブドメインとして可動させたりできる
+- kiali
+  - リクエストのトレースを行う
+- mixer
+  - Istio のコンポーネント
+- nodeagent
+  - ノード単位のセキュリティ機能・設定を提供するエージェント
+- pilot
+  - Istio のコンポーネント
+- prometheus
+  - メトリクス監視ツール
+- security
+  - セキュリティの設定
+- sidecarInjectorWebhook
+  - [Admission Controllers](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/) という kube-api コールの際のインターセプト機能を利用
+  - [Automatic sidecar injection](https://istio.io/docs/setup/additional-setup/sidecar-injection/#automatic-sidecar-injection) を実現する
+- tracing
+  - 各 Service/Deployment でのリクエストのレイテンシを追跡する
+  - Jeager
+
+設定については [ここ](https://istio.io/docs/reference/config/installation-options/) を参照。
+
+## ちょっと設定見てみる
 
 ```bash
 .
@@ -173,7 +220,7 @@ Istio IngressGateway の他に **Istio EgressGateway** （外部への HTTP(S) �
 ```
 
 ```yaml:helmfile.yaml
-repositories:
+repositories: # 利用する helm リポジトリ
   - name: elastic
     url: https://helm.elastic.co
   - name: kiwigrid
@@ -181,7 +228,8 @@ repositories:
   - name: codecentric
     url: https://codecentric.github.io/helm-charts
 
-releases:
+releases: # 利用する helm chart 単位で name をつけて設定する
+          # values.yaml ファイルにて設定を外出しできるので環境毎に作成できる
   # 前提として、istio-init が完了している必要がある
   # https://github.com/istio/istio/tree/master/install/kubernetes/helm/istio
   - name: istio
@@ -190,6 +238,8 @@ releases:
     values:
     - istio-values.yaml
 ```
+
+以下 Istio の valies.yaml ファイルの例。
 
 ```yaml:istio-value.yaml
 gateways:
@@ -232,45 +282,6 @@ tracing:
     persist: true
     accessMode: ReadWriteOnce
 ```
-
-Helm から構築する Istio は、 Istio では飽き足らず、様々な機能を構築することが可能。
-
-- certmanager
-  - TLSの証明書を自動で生成し管理するK8sのアドオン
-- galley
-  - Istio のコンポーネント
-- gateways
-  - Istio のコンポーネント
-  - Istio IngressGateway/IblGateway/EgressGateway
-- global
-  - Istio の共通設定
-- grafana
-  - 可視化ツール、 Prometheus とともに
-- istio_cni
-  - CNI (Container Network Interface) の設定
-- istiocoredns
-  - Istio サービスの namespace で利用できるDNS の設定
-  - kube-dns (CoreDNS) のサブドメインとして可動させたりできる
-- kiali
-  - リクエストのトレースを行う
-- mixer
-  - Istio のコンポーネント
-- nodeagent
-  - ノード単位のセキュリティ機能・設定を提供するエージェント
-- pilot
-  - Istio のコンポーネント
-- prometheus
-  - メトリクス監視ツール
-- security
-  - セキュリティの設定
-- sidecarInjectorWebhook
-  - [Admission Controllers](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/) という kube-api コールの際のインターセプト機能を利用
-  - [Automatic sidecar injection](https://istio.io/docs/setup/additional-setup/sidecar-injection/#automatic-sidecar-injection) を実現する
-- tracing
-  - リクエストのレイテンシを追跡する
-  - Jeager
-
-設定については [ここ](https://istio.io/docs/reference/config/installation-options/) を参照。
 
 # 参考
 
