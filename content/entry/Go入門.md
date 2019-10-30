@@ -54,10 +54,10 @@ export GO111MODULE=on
 
 >教科書敵には以下。
 >```zsh
->export GOROOT=`go env GOROOT` # 個人的にはこれは不要
->export GOPATH=`go env GOPATH`
->export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
->```
+export GOROOT=`go env GOROOT` # 個人的にはこれは不要
+export GOPATH=`go env GOPATH`
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+```
 
 反映。
 
