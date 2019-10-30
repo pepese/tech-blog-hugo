@@ -20,9 +20,10 @@ golang の基本的なところをまとめる。
 
 # 環境構築
 
-```bash
-$ brew install go
-$ go version
+```zsh
+% xcode-select --install # Mac の場合はとりあえずやっておく
+% brew install go
+% go version
 go version go1.12.5 darwin/amd64
 ```
 
@@ -43,32 +44,30 @@ https://golang.org/doc/install/source#environment
 - `GOARCH`
     - コンパイルして作成するバイナリの対象 CPU を指定する
 
-`.bash_profile` に以下を追記。（教科書的には）
+`.zshenv` （ bash の場合は `.bash_profile` ）に以下を追記。
 
-``` bash
-export GOROOT=`go env GOROOT`
-export GOPATH=`go env GOPATH`
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
-```
-
-個人的には以下。
-
-``` bash
+```zsh
 export GOPATH=`go env GOPATH`
 export PATH=$PATH:$GOPATH/bin
 export GO111MODULE=on
 ```
 
+>教科書敵には以下。
+>```zsh
+>export GOROOT=`go env GOROOT` # 個人的にはこれは不要
+>export GOPATH=`go env GOPATH`
+>export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+>```
+
 反映。
 
-```bash
-$ source .bash_profile
-# exec $SHELL -l
+```zsh
+% exec $SHELL -l
 ```
 
 また、 `$GOPATH` 以下のディレクトリ構造は以下のようになる。
 
-```
+```zsh
 $GOPATH
 ├─bin/ # Goツール類の実行ファイルが格納されるディレクトリ
 ├─pkg/ # ビルドしたパッケージオブジェクトが格納されるディレクトリ
@@ -129,28 +128,29 @@ Go Modules の概要は以下。
 
 `$GOPATH` 配下で github および Go Modules を利用したプロジェクトの初回作成は以下のような感じ。
 
-```bash
-$ mkdir -p $GOPATH/src/github.com/<あなたのGithubアカウント名>
-$ cd $GOPATH/src/github.com/<あなたのGithubアカウント名>
-$ mkdir <golangプロジェクト> # プロジェクトディレクトリの作成
-$ cd <golangプロジェクト>
-$ export GO111MODULE=on
-$ go mod init # `GO111MODULE=on go mod init` のように一行でも
+```zsh
+% mkdir -p $GOPATH/src/github.com/<あなたのGithubアカウント名>
+% cd $GOPATH/src/github.com/<あなたのGithubアカウント名>
+% mkdir <golangプロジェクト> # プロジェクトディレクトリの作成
+% cd <golangプロジェクト>
+% export GO111MODULE=on
+% go mod init              # `GO111MODULE=on go mod init` のように一行でも
 go: creating new go.mod: module github.com/<あなたのGithubアカウント名>/<golangプロジェクト>
-$ ls
+% ls
 go.mod
-$ touch app.go    # 依存ライブラリ含め好きなコード書く
-$ go mod tidy     # 依存ライブラリの解決
-$ go run app.go   # ビルド+実行
-$ go build app.go # ビルド
-$ ./app
+% touch app.go             # 依存ライブラリ含め好きなコード書く
+% go mod tidy              # 依存ライブラリの解決
+% go run app.go            # ビルド+実行
+% go build app.go          # ビルド
+% ./app
 ```
 
 基本的にはどこのディレクトリで開発しようとも **module-aware mode** で開発することになると思う。
 
 ## VS Code の設定
 
-VS Code には Go の各種ツールと連携する拡張機能があり、 VS Code 内ターミナルから以下のようにコマンドラインツールを導入することにより自動で拡張機能インストールの案内をしてくれる。
+VS Code には Go の各種ツールと連携する拡張機能があり、 VS Code 内ターミナルから以下のようにコマンドラインツールを導入することにより自動で拡張機能インストールの案内をしてくれる。  
+Go の拡張機能をインストールしてから、VSCode でコマンドパレット(Cmd+Shift+P)を開いて `GO: Install/Update tools` で検索した後、全チェックしてインストールしてもいいし、以下で 1 つずつ入れてもいい。
 
 - goimports
     - 過不足のimportの自動補完
@@ -165,7 +165,7 @@ VS Code には Go の各種ツールと連携する拡張機能があり、 VS C
     - `go get -u -v github.com/zmb3/gogetdoc`
 - golint
     - lint
-	- `go get -u -v github.com/golang/lint/golint`
+	- `go get -u -v golang.org/x/lint/golint`
 - go-outline
     - `go get -u -v github.com/lukehoban/go-outline`
 - goreturns
@@ -203,7 +203,7 @@ trim_trailing_whitespace = true
 ## docker によるマルチステージビルド
 
 ```
-FROM golang:1.12.8-alpine3.10 as build
+FROM golang:1.13.3-alpine3.10 as build
 ADD ./ ./
 RUN go build main.go
 
@@ -257,8 +257,8 @@ func main() {
 }
 ```
 
-```bash
-$ go run hello.go
+```zsh
+% go run hello.go
 Hello, 世界
 ```
 
