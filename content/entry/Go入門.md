@@ -59,6 +59,18 @@ export GOPATH=`go env GOPATH`
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 ```
 
+[anyenv](https://github.com/anyenv/anyenv) および [goenv](https://github.com/syndbg/goenv) を利用する場合の `.zshenv` は以下。
+
+```zsh
+export GOENV_DISABLE_GOPATH=1 # これがポイント？
+export PATH="$HOME/.anyenv/bin:$PATH"
+eval "$(anyenv init -)"
+
+export GOPATH=`go env GOPATH`
+export PATH=$PATH:$GOPATH/bin
+export GO111MODULE=on
+```
+
 反映。
 
 ```zsh
