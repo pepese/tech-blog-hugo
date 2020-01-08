@@ -20,12 +20,14 @@ draft: true
 
 # 環境設定
 
-ここでは [公式](https://grpc.io/docs/quickstart/go/) とは異なる方法で設定して軽く動確する。
+ここでは [公式](https://grpc.io/docs/quickstart/go/) とは異なる方法で設定して軽く動確する。（基本は公式参照）
 
 ``` bash
 $ go get -u google.golang.org/grpc
-$ brew install protobuf # protoc コマンドが入る
-$ brew install protoc-gen-go # go に対応するコードを出力するためのプラグイン
+$ brew install protobuf                              # protoc コマンドが入る（ここが公式とは異なる）
+$ protoc --version                                   # 必ずバージョンを確認する
+libprotoc 3.7.1
+$ go get -u github.com/golang/protobuf/protoc-gen-go # go に対応するコードを出力するためのプラグイン
 ```
 
 `$GOPATH/src/google.golang.org/grpc/examples` にサンプルあり。  
@@ -53,6 +55,24 @@ $ protoc -I helloworld/ helloworld/helloworld.proto --go_out=plugins=grpc:hellow
 ```
 
 `protoc <.proto file> --go_out=plugins=grpc:<out dir>` 。
+
+>## protoc コマンドがエラーになる、変な pb.go が出力される
+>protoc コマンドと protoc-gen-go のバージョンの組合せが悪いことが原因と思われる。  
+>以下のように protoc-gen-go のバージョンを変更することで対応する。  
+>```
+>$ cd $GOPATH/src/github.com/golang/protobuf/protoc-gen-go
+>$ git checkout v1.2.0
+>$ go install
+>$ git checkout master
+>```
+>なお、ブランチを master に戻しておかないと再度 `go get -u` した時にエラーになるので戻している。  
+>また、 pb.gw.go も作成する場合は以下も実施する。
+>```
+>$ cd $GOPATH/src/github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
+>$ git checkout v1.5.1
+>$ go install
+>$ git checkout master
+>```
 
 # gRPC
 
