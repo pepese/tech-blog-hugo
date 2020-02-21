@@ -127,7 +127,7 @@ $ emulator -avd test
 ```
 
 - [sdkmanager](https://developer.android.com/studio/command-line/sdkmanager.html)
-- [avdmanager](https://developer.android.com/studio/command-line/avdmanager.html#syntax)
+- [avdmanager](https://developer.android.com/studio/command-line/avdmanager.html)
 - [emulator](https://developer.android.com/studio/run/emulator-commandline.html)
 
 ### 実機
