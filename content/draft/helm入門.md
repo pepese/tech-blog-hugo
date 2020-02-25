@@ -151,7 +151,7 @@ $ helm install --name my_release -f values.yaml stable/mysql
 
 なお、インストール対象の Chart には、アーカイブ・ディレクトリ・URL も指定できる。
 
-## 独自の Chart を作成する
+# 独自の Chart を作成する
 
 |コマンド|概要|
 |:---|:---|
@@ -206,21 +206,186 @@ $ helm package sample-chart # パッケージング
 4. 環境差分毎に `values.yaml` （ `values.dev.yaml` とか `values.prd.yaml` とか ）を作る
 5. 適用する（ `$ helm install -f values.yaml sample-chart` ）
 
-### テンプレートの書き方
+## テンプレートの書き方
 
-テンプレートでは `{{}}` で囲った部分が他の値で書き換えられるのだが、以下のようになる。
+テンプレートでは `{{}}` で囲った部分が他の値で書き換えられるのだが、以下のようになる。  
+また、中括弧内側の前後にダッシュ `{{- -}}` をつけることができ、前に付けた場合はその部分より前の半角スペースを、後ろにつけた場合は改行コードを取り除くことができる。
+これは値を展開しない構文に対して使われることがある。（要はその行自体消したいときとか）
+
+### ビルドインオブジェクト（ [Built-in Objects](https://helm.sh/docs/chart_template_guide/builtin_objects/) ）
 
 - `.Values`
-    - `values.yaml` ファイルの値を参照する
-    - テンプレートファイル内から `.Values.aaa.bbb` のように、".Values"を接頭辞として、そのYAMLのルート構造以下にアクセスすることで値を参照する
-- `template`
-    - 定義済みの部分テンプレートを呼び出すAction
-    - `templates/_helpers.tpl` で `define` により定義した値を埋め込む
+  - `values.yaml` ファイルの値を参照する
+  - テンプレートファイル内から `.Values.aaa.bbb` のように、".Values"を接頭辞として、そのYAMLのルート構造以下にアクセスすることで値を参照する
 - `.Release`
-- `include`
+  - リリースそのものを指し、さまざまな情報を持つ
+  - Release.Name：リリース名
+  - Release.Namespace：リリースされた Kubernetes クラスタのネームスペース
+  - Release.IsUpgrade：現在のオペレーションが更新された場合 true となる
+  - Release.IsInstall：現在のオペレーションがインストールされたら true となる
+  - Release.Revision：リリースのリビジョン番号
 - `.Chart`
-- `toYaml`
+  - `Chart.yaml` のコンテンツ
+  - `{{ .Chart.Name }}-{{ .Chart.Version }}` のように使える
+- `.Files`
+- `.Capabilities`
+- `.Template`
 
+### 関数
+
+Template構文内では事前定義された様々な関数を使うことができる。  
+helm で利用できる関数がまとまっているページは見当たらないが、 Go のテンプレート関数は[ここ](http://masterminds.github.io/sprig/)。
+関数はパイプ(|) を使うことでチェインすることができる。
+
+```
+{{ .Files.get "files/main.cf" | nindent 4}}
+```
+
+以下、代表的なもの。
+
+- `nindent <numer> <string>`
+  - 第2引数に渡した文字列の各行の先頭に第1引数の数値分だけ半角スペース(つまりインデント)を埋め込む
+  - yaml等の文字列を展開する場合にこの関数でインデントを調整することができる
+- `toYaml`
+  - オブジェクトをyaml形式で展開する
+  - values.yamlに記載されているyamlを直接マニフェストファイルに展開したい場合などにこの関数を使う
+```
+# values.yaml
+test:
+  hoge:
+    fuga: piyo
+
+# deployment.yaml
+expand:
+  {{- nindent 2 (toYaml .Values.test) }}
+
+# ↓↓展開されると↓↓
+expand:
+  hoge:
+    fuga: piyo
+```
+- `include <string> <object>`
+  - _helpers.tpl に定義した名前付きtemplateを展開する
+  - 第2引数のオブジェクトは名前付きtemplate側でのルートオブジェクトとして扱われ、基本的にはルートオブジェクトをそのまま渡すパターン `{{ inculude "fugafuga" . }}` が多い
+```
+# values.yaml
+test:
+  hoge:
+    fuga: piyo
+
+# _helpers.tpl
+{{- define "fugafuga" -}}
+- {{ toYaml . -}}
+- {{ toYaml . -}}
+{{- end }}
+
+# deployment.yaml
+expand:
+  {{- include "fugafuga" .Values.test.hoge | nindent 2 }}
+
+# ↓↓展開されると↓↓
+expand:
+  - fuga: piyo
+  - fuga: piyo
+```
+- `tpl <string> <object>`
+  - 第1引数の文字列をTemplateとして解釈し、第2引数をルートオブジェクトとして展開する
+  - _helpers.tpl に定義しているものは include で展開すればTemplateとして解釈されるのでこちらは外部ファイルを取ってきたあとに適用する場合が多い
+  - Template構文を展開するだけなのでyaml以外の文字列でも適用は可能
+```
+# values.yaml
+nginxValues:
+  nginxUser: "nginx"
+
+# files/nginx.conf
+user {{ .nginxUser }};
+http{
+    # いろいろ
+}
+
+# configmap.yaml
+data:
+  nginx.conf: |
+{{ tpl (.Files.Get "files/nginx.conf") .Values.nginxValues | nindent 4 }}
+
+# ↓↓展開されると↓↓
+data:
+  nginx.conf: |
+    user nginx;
+    http{
+        # いろいろ
+    }
+```
+- `.Files.Get <string>`
+  - 外部からファイルを文字列として取り込む
+  - 第1引数はファイルパスでChartのルートディレクトリ( Chart.yaml の置いてあるディレクトリ)からの相対パスを記載する
+
+### アクション
+
+関数のほか、Templateを制御するためいくつかのキーワードが用意されている。  
+一般的なプログラミング言語でいう `if` や `for` などにあたり、これをHelmでは **アクション** と呼ぶ。
+
+- if/else
+- with
+  - 引数に渡したオブジェクトをルートオブジェクトとしたスコープを展開
+  - 引数に渡したオブジェクトが if/else アクションで紹介したfalseにあたる値の場合はwithブロック自体が展開されない、つまり簡易的な if としても使用できる
+```
+# values.yaml
+configPaths:
+  nginxConfPath: "files/nginx.conf"
+
+# configmap.yaml
+{{- $files = .Files -}}
+
+data:
+{{- with .Values.configPaths -}}
+  nginx.conf: |
+{{ $files.get .nginxConfPath | nindent 4 }}
+{{- end -}}
+```
+- range
+  - 引数に渡した配列でループを回す
+  - ループ内のスコープでは配列の値自体がルートオブジェクトとなる
+```
+# values.yaml
+configPaths:
+  - key: nginx.conf
+    path: "files/nginx.conf"
+  - key: postfix.main.cf
+    path: "files/main.cf"
+
+# comfigmap.yaml
+{{- $files = .Files -}}
+
+data:
+{{- range .Values.configPaths -}}
+  {{ .key }}: |
+{{ $files.get .path | nindent 4 }}
+{{- end -}}
+
+# ↓↓展開されると↓↓
+data:
+  nginx.conf: |
+    # nginx.confの内容
+  main.cf: |
+    # main.cfの内容
+```
+- `template`
+  - `_helpers.tpl` に定義してある名前付きtemplateを展開
+  - `templates/_helpers.tpl` で `define` により定義した値を埋め込む
+  - ただし、include関数と違いルートオブジェクトを渡すことができない
+
+## `_helpers.tpl`
+
+Chart内で共通で使うことのできるテンプレートスニペットを定義する。これは「名前付きテンプレート」と呼ばれる。  
+values.yaml が差し替え可能な変数、ローカル変数が定義したTemplateファイル内でのみ使える変数、_helpers.tplはチャート内で自由に使える変数、という形に捉えることができる。  
+`define` アクションを使うことで名前付きテンプレートを定義することができる。
+
+```
+{{- define "myapp.namespace" -}}
+{{ .Chart.Name }}-space
+{{- end }}
+```
 
 # プラグイン・ツール
 
