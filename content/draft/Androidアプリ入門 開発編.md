@@ -105,7 +105,7 @@ onPostResume state:RESUMED
 
 <img src="https://codelabs.developers.google.com/codelabs/kotlin-android-training-lifecycles-logging/img/f6b25a71cec4e401.png">
 
-## UI
+## [UI](https://developer.android.com/guide/topics/ui?hl=ja)
 
 Android アプリの UI は、レイアウト（ `ViewGroup` オブジェクト）とウィジェット（ `View` オブジェクト）の階層を使用して作成さする。  
 レイアウトは、その子ビューが画面にどのように配置されるかを制御するコンテナで、ウィジェットは、ボタンやテキスト ボックスなどの UI コンポーネント。  
@@ -113,7 +113,9 @@ Android アプリの UI は、レイアウト（ `ViewGroup` オブジェクト�
 
 <img src="https://developer.android.com/images/viewgroup_2x.png?hl=ja">
 
-## インテント
+## [インテント](https://developer.android.com/guide/components/intents-filters?hl=ja)
+
+Intent は、別のアプリコンポーネントからのアクションをリクエストするときに使用できるメッセージングオブジェクト。
 
 ```kotlin
     const val EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE"
