@@ -20,9 +20,31 @@ DeFi とは、ブロックチェーンをあらゆる金融分野（証券、保
   - ERC20 に準拠したトークンであれば、無数に存在する種類のトークンを同じ枠組みで価値移転することができる
   - https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20-token-standard.md
   - Ganache（ローカル開発環境）、Metamask（Ethereumウォレット）、[Truffle](https://www.trufflesuite.com/) （Ethereum の開発フレームワーク）、[Solidity](https://solidity.readthedocs.io/en/develop/)（プログラミング言語）を用いて開発する
-- Dapp/Decentralized Application（分散型アプリケーション）：スマートコントラクトを活用することで機能
-- DEX/Decentralized Exchange（分散取引所）：取引所機能を持つDapps
+- dApp/Decentralized Application（分散型アプリケーション）：スマートコントラクトを活用することで機能
+- DEX/Decentralized Exchange（分散取引所）：取引所機能を持つdApps
   - 取引所に資産を預けることなく、ERC20トークンであれば簡単にETHとトレードすることができる
+
+# DeFi Projects
+
+- [Alternative Savings](https://defiprime.com/alternative-savings)：代替貯金？
+- Analytics
+- Asset Management Tools
+- DAOs
+- Decentralized exchanges
+- Derivatives：デリバティブ
+- Infrastructure & Dev Tooling
+- Insurance：保険
+- KYC & Identity
+- [Lending & Borrowing](https://defiprime.com/decentralized-lending)：ローン・融資（貸す借りる）による利子
+  - [Compound](https://compound.finance/)：Ethereum上の暗号通貨の貸借のためのプロトコル
+    - [「Compound」でLending Dappを作ってみる](https://blockchain-insight.ch/jp/2019/11/30/1826)
+- Margin trading
+- Marketplaces
+- Payments
+- Prediction markets
+- Stablecoins
+- Staking
+- Tokenization of Assets
 
 # 参考
 
