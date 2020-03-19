@@ -23,19 +23,30 @@ DeFi とは、ブロックチェーンをあらゆる金融分野（証券、保
 - dApp/Decentralized Application（分散型アプリケーション）：スマートコントラクトを活用することで機能
 - DEX/Decentralized Exchange（分散取引所）：取引所機能を持つdApps
   - 取引所に資産を預けることなく、ERC20トークンであれば簡単にETHとトレードすることができる
+- ステーブルコイン
+  - 法定通貨担保型：USDTなど。Tether社が発行量と同等の米ドルを確保して（いるとされている）価格を担保している
+  - 仮想通貨担保型：DAI。ETHを担保にしている。
+  - 無担保型：Basis。アルゴリズムで供給量を調整する。
+- [MakerDAO](https://makerdao.com/ja/)：makerDAOはステーブルコインDAIのプロトコル
+  - Collateralized Debt Position (CDP)というスマートコントラクトにより担保されたETHによってDAIの価値を維持するための様々な仕組みが、Ethereum上のスマートコントラクトで実現されている
+  - [MakerDAO のステーブルコイン DAI とは！？ スマホでの発行方法！](https://makionaire.com/makerdao-dai/)
 
-# DeFi Projects
+# [DeFi Projects](https://defiprime.com/)
 
 - [Alternative Savings](https://defiprime.com/alternative-savings)：代替貯金？
+  - [PoolTogether](https://www.pooltogether.com/)：手軽な宝くじdApp
 - Analytics
 - Asset Management Tools
 - DAOs
-- Decentralized exchanges
+- Decentralized exchanges/DEXES：両替
+  - [Uniswap](https://uniswap.exchange/swap)
 - Derivatives：デリバティブ
+  - [Synthetix](https://www.synthetix.io/)
 - Infrastructure & Dev Tooling
 - Insurance：保険
 - KYC & Identity
-- [Lending & Borrowing](https://defiprime.com/decentralized-lending)：ローン・融資（貸す借りる）による利子
+- [Lending(& Borrowing)](https://defiprime.com/decentralized-lending)：ローン・融資（貸す借りる）による利子
+  - [Maker](https://cdp.makerdao.com/)
   - [Compound](https://compound.finance/)：Ethereum上の暗号通貨の貸借のためのプロトコル
     - [「Compound」でLending Dappを作ってみる](https://blockchain-insight.ch/jp/2019/11/30/1826)
 - Margin trading
@@ -45,6 +56,30 @@ DeFi とは、ブロックチェーンをあらゆる金融分野（証券、保
 - Stablecoins
 - Staking
 - Tokenization of Assets
+
+以下、 DeFi Project の状態を理解するサイトなど。
+
+- [DeFi Pulse](https://defipulse.com/)
+  - DeFi protocols のランキング
+  - 1 時間に 1 回 Ethereum からスマートコントラクトを通じて Ether と ECR-20 トークンの残高を取得して TVL（total value locked）を計算している。
+  - TLV はプロトコル上に存在する Ether や ECR-20 トークンを USD などに換算した際の合計値
+  - TLV を比較することで DeFi protocols の比較を行っている
+- [DAppTotal](https://dapptotal.com/defi)
+
+# DeFi で収入を得る方法
+
+## 融資による利子
+
+1. Ether を Wallet に送る
+2. DEXES で Ether を DAI に両替する
+3. Compound などで融資する（参考：[Earn Interest Income](https://defipulse.com/income)）
+4. 利子（interest）を得る
+
+## Pool Together
+
+- 参考
+  - https://zenism.jp/defi-blog/pooltogether-how-to/2019/06/25/
+  - https://zenism.jp/projects/lending/pooltogether/2019/06/25/
 
 # 参考
 
