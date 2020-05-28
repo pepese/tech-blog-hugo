@@ -178,7 +178,8 @@ Pull Requestマージ後の作業。
 ```sh
 $ git checkout master
 $ git branch -d issue1      #ローカルブランチの削除
-$ git push origin issue1   #リモートブランチの削除
+$ git push origin :issue1   #リモートブランチの削除
+# もしくは git push --delete origin issue1
 ```
 
 ## ファイルの変更を戻す
