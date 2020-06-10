@@ -10,7 +10,7 @@ kubernetes では `kubectl` に様々コマンドがあるが、基本的には 
 
 - マニフェストの雛形
 - マニフェストの理解
-- 特殊なリソース
+- その他のリソース
 
 # マニフェストの雛形
 
@@ -302,11 +302,37 @@ spec: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#ser
   type: # ExternalName 、 ClusterIP （デフォルト）、 NodePort 、および LoadBalancer 。
 ```
 
-# 特殊なリソース
+# その他のリソース
 
 基本的なリソース以外に以下について記載する。
 
-- HPA（Horizontal Pod Autoscaling）
+- [HPA（HorizontalPodAutoscaler）](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
+
+## HPA（HorizontalPodAutoscaler）
+
+HPA は pod の負荷に応じて自動的に pod の数を水平スケールさせるリソース。  
+Deployment, ReplicaSet, ReplicationController, StatefulSetはscaled resource objectと呼ばれ、これらがauto scalingの対象リソースとなる。
+
+```apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: php-hpa
+  namespace: default
+spec:
+  scaleTargetRef: # ここでautoscale対象となる`scaled resource object`を指定
+    apiVersion: apps/v1
+    kind: Deployment
+    name: php-deploy
+  minReplicas: 1 # 最小レプリカ数
+  maxReplicas: 5 # 最大レプリカ数
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: 50 # CPU使用率が常に50%になるように指定
+```
+
+[参考](https://qiita.com/sheepland/items/37ea0b77df9a4b4c9d80)
 
 # 参考
 
