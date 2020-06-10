@@ -10,6 +10,7 @@ kubernetes では `kubectl` に様々コマンドがあるが、基本的には 
 
 - マニフェストの雛形
 - マニフェストの理解
+- 特殊なリソース
 
 # マニフェストの雛形
 
@@ -46,11 +47,11 @@ status: {}
 
 # マニフェストの理解
 
-``` yaml:sample_pod.yml
+``` yaml:sample-pod.yml
 apiVersion: v1
 kind: Pod
 metadata:
-  name: sample_pod
+  name: sample-pod
 spec:
   containers:
     - name: nginx
@@ -71,26 +72,26 @@ spec:
 Pod の場合は `spec` 以下に Pod の内容を定義する。
 
 ```
-$ kubectl create -f sample_pod.yaml
-pod "sample_pod" created
+$ kubectl create -f sample-pod.yaml
+pod "sample-pod" created
 
-$ kubectl apply -f sample_pod.yaml
-pod "sample_pod" configured
+$ kubectl apply -f sample-pod.yaml
+pod "sample-pod" configured
 
-$ kubectl delete -f sample_pod.yaml
-pod "sample_pod" deleted
+$ kubectl delete -f sample-pod.yaml
+pod "sample-pod" deleted
 ```
 
 `kubectl apply` はマニフェストに変更がある場合のみ変更処理を行う。  
 削除済みのマニフェストに対しても差分を検出するため、新規作成でも `apply` を使用するほうがよい。  
 また、マニフェストには複数のリソースを同時に記述することができ、 **`---`** で区切る。
 
-```yaml:sample_pod.yml
+```yaml:sample-pod.yml
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: sample_pod
+  name: sample-pod
 spec:
   containers:
     - name: nginx
@@ -141,40 +142,40 @@ namespace リソース（ `kind: Namespace` ）を作成し、各リソースの
 apiVersion: app/v1
 kind: Deployment
 metadata: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#objectmeta-v1-meta
-  annotations: # 任意のメタデータを保存および取得する。外部ツールなどによって設定・変更・保存される箇所でもある。
+  annotations:                # 任意のメタデータを保存および取得する。外部ツールなどによって設定・変更・保存される箇所でもある。
     key: value
-  clusterName: string # オブジェクトが所属するクラスタ名。異なるクラスターで同じ名前と名前空間を持つリソースを区別するために使用。使わない。
-  creationTimestamp: # このオブジェクトが作成されたサーバ時間。変更できない。
+  clusterName: string         # オブジェクトが所属するクラスタ名。異なるクラスターで同じ名前と名前空間を持つリソースを区別するために使用。使わない。
+  creationTimestamp:          # このオブジェクトが作成されたサーバ時間。変更できない。
   deletionGracePeriodSeconds: # オブジェクトの正常終了までの時間。読み取り専用。
-  deletionTimestamp: # オブジェクトが削除される時間。読み取り専用。
-  finalizers: # リストからエントリを削除する責任のあるコンポーネントの識別子。削除のみ可能。
-  generateName: # name が設定されていない場合にのみオプションで設定される名前。
-  generation: # 状態の世代を表す。読み取り専用。
-  initializers: # オブジェクトの作成時にシステムの不変条件を強制するコントローラー。DEPRECATED。
-  labels: # ReplicaSet、Service の selector で利用。
+  deletionTimestamp:          # オブジェクトが削除される時間。読み取り専用。
+  finalizers:                 # リストからエントリを削除する責任のあるコンポーネントの識別子。削除のみ可能。
+  generateName:               # name が設定されていない場合にのみオプションで設定される名前。
+  generation:                 # 状態の世代を表す。読み取り専用。
+  initializers:               # オブジェクトの作成時にシステムの不変条件を強制するコントローラー。DEPRECATED。
+  labels:                     # ReplicaSet、Service の selector で利用。
     key: value
-  managedFields: # 内部のワークフロー用でユーザは設定・理解の必要はない。
-  name: # namespace 内で一意なオブジェクトの名前。
-  namespace: # 名前空間名。空は default と同じ。 DNS_LABEL である必要があり、変更できない。
-  ownerReferences: # このオブジェクトに依存するオブジェクトのリスト。コントローラにより管理される。
-  resourceVersion: # オブジェクトがいつ変更されたかを判断するためにクライアントが使用できるこのオブジェクトの内部バージョン。読み取り専用。
-  selfLink: # このオブジェクトを表すURL。読み取り専用。
-  uid: # このオブジェクトの一意な ID 。システムにより管理される。
+  managedFields:              # 内部のワークフロー用でユーザは設定・理解の必要はない。
+  name:                       # namespace 内で一意なオブジェクトの名前。
+  namespace:                  # 名前空間名。空は default と同じ。 DNS_LABEL である必要があり、変更できない。
+  ownerReferences:            # このオブジェクトに依存するオブジェクトのリスト。コントローラにより管理される。
+  resourceVersion:            # オブジェクトがいつ変更されたかを判断するためにクライアントが使用できるこのオブジェクトの内部バージョン。読み取り専用。
+  selfLink:                   # このオブジェクトを表すURL。読み取り専用。
+  uid:                        # このオブジェクトの一意な ID 。システムにより管理される。
 spec: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#deploymentspec-v1-apps
-  minReadySeconds: # コンテナがクラッシュすることなく、新しく作成されたポッドの準備が整うまでの最小秒数。デフォルト 0 。
-  paused: bool # 展開が一時停止されていることを示す。
+  minReadySeconds:         # コンテナがクラッシュすることなく、新しく作成されたポッドの準備が整うまでの最小秒数。デフォルト 0 。
+  paused: bool             # 展開が一時停止されていることを示す。
   progressDeadlineSeconds: # 展開が失敗したと見なされるまで最大秒数。
-  replicas: # Pod のリプリケーション数。
-  revisionHistoryLimit: # ロールバックを許可するReplicaSetの世代数。デフォルト 10 。
+  replicas:                # Pod のリプリケーション数。
+  revisionHistoryLimit:    # ロールバックを許可するReplicaSetの世代数。デフォルト 10 。
   selector: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#labelselector-v1-meta
             # ReplicaSet が Pod を選択するための Label Selector 。
     matchExpressions: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#labelselectorrequirement-v1-meta
                       # Label Selector のリスト。 AND で評価される。
-    matchLabels: # key-value 形式の Label Selector のリスト。 AND で評価される。matchExpressions の方が複雑な表現が可能。
+    matchLabels:      # key-value 形式の Label Selector のリスト。 AND で評価される。matchExpressions の方が複雑な表現が可能。
   strategy: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#deploymentstrategy-v1-apps
             # 新しいポッドに置き換えるため展開戦略。現状は単純な再配置とローリングアップデートのみ。
     rollingUpdate: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#rollingupdatedeployment-v1-apps
-      maxSurge: # Pod のレプリケーション数を超えて作成できるコンテナの最大数。数か割合で表現。
+      maxSurge:       # Pod のレプリケーション数を超えて作成できるコンテナの最大数。数か割合で表現。
       maxUnavailable: # Pod のレプリケーション数を下回って利用できなくする最大数。数か割合で表現。
     type: # Recreate か RollingUpdate 。デフォルト RollingUpdate 。
   template: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#podtemplatespec-v1-core
@@ -187,60 +188,60 @@ spec: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#dep
       automountServiceAccountToken: # サービスアカウントトークンを自動的にマウントする必要があるかどうかを示す。
       containers: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#container-v1-core
                   # Pod に属するコンテナのリスト。
-        args: # ENTRYPOINT へ引数。
-        command: # ENTRYPOINT 配列。
-        env: # 環境変数のリスト。
-        envFrom: # 環境変数を設定するソースのリスト。
-        image: # Docker イメージ名。
-        imagePullPolicy: # Docker イメージの pull ポリシー。 Always, Never, IfNotPresent のいずれか。
-        lifecycle: # コンテナのライフサイクルイベントに応じて管理システムが実行するアクション。
-        livenessProbe: # コンテナ死活の定期的な調査。
-        name: # コンテナ名。DNS_LABEL となる。
-        ports: # コンテナの公開ポートのリスト。
-        readinessProbe: # コンテナサービスの準備状況の定期的な調査。
-        resources: # コンテナが利用するコンピュートリソース。
-        securityContext: # Pod を実行するセキュリティオプション。
-        stdin: # コンテナがコンテナーランタイムで標準入力にバッファーを割り当てるかどうか。デフォルト false は EOF になる。
-        stdinOnce: # 単一の接続によって開かれた後に、コンテナランタイムがstdinチャネルを閉じるかどうか。デフォルト false 。
-        terminationMessagePath: # オプション：コンテナの終了メッセージが書き込まれるファイルがコンテナのファイルシステムにマウントされるパス。
+        args:                     # ENTRYPOINT へ引数。
+        command:                  # ENTRYPOINT 配列。
+        env:                      # 環境変数のリスト。
+        envFrom:                  # 環境変数を設定するソースのリスト。
+        image:                    # Docker イメージ名。
+        imagePullPolicy:          # Docker イメージの pull ポリシー。 Always, Never, IfNotPresent のいずれか。
+        lifecycle:                # コンテナのライフサイクルイベントに応じて管理システムが実行するアクション。
+        livenessProbe:            # コンテナ死活の定期的な調査。
+        name:                     # コンテナ名。DNS_LABEL となる。
+        ports:                    # コンテナの公開ポートのリスト。
+        readinessProbe:           # コンテナサービスの準備状況の定期的な調査。
+        resources:                # コンテナが利用するコンピュートリソース。
+        securityContext:          # Pod を実行するセキュリティオプション。
+        stdin:                    # コンテナがコンテナーランタイムで標準入力にバッファーを割り当てるかどうか。デフォルト false は EOF になる。
+        stdinOnce:                # 単一の接続によって開かれた後に、コンテナランタイムがstdinチャネルを閉じるかどうか。デフォルト false 。
+        terminationMessagePath:   # オプション：コンテナの終了メッセージが書き込まれるファイルがコンテナのファイルシステムにマウントされるパス。
         terminationMessagePolicy: # 終了メッセージの入力方法。
-        tty: # コンテナに TTY を割り当てるか否か。デフォルト false 。
-        volumeDevices: # コンテナが使用するブロックデバイスのリスト。
-        volumeMounts: # コンテナのファイルシステムにマウントするポッドボリューム。
-        workingDir: # コンテナの作業ディレクトリ。
+        tty:                      # コンテナに TTY を割り当てるか否か。デフォルト false 。
+        volumeDevices:            # コンテナが使用するブロックデバイスのリスト。
+        volumeMounts:             # コンテナのファイルシステムにマウントするポッドボリューム。
+        workingDir:               # コンテナの作業ディレクトリ。
       dnsConfig: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#poddnsconfig-v1-core
         nameservers: # DNSネームサーバーのIPアドレスのリスト。
-        options: # DNSリゾルバーオプションのリスト。
-        searches: # ホスト名検索用のDNS検索ドメインのリスト。
-      dnsPolicy: # Pod の DNS ポリシー。ClusterFirstWithHostNet, ClusterFirst（デフォルト）, Default, None 。
+        options:     # DNSリゾルバーオプションのリスト。
+        searches:    # ホスト名検索用のDNS検索ドメインのリスト。
+      dnsPolicy:   # Pod の DNS ポリシー。ClusterFirstWithHostNet, ClusterFirst（デフォルト）, Default, None 。
       enableServiceLinks: # サービスに関する情報をDockerリンクの構文と一致する Pod の環境変数に注入するか否か。デフォルト true 。
       hostAliases: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#hostalias-v1-core
                    # Pod の hosts ファイルへの追加設定。
-      hostIPC: # ホストの IPC 名前空間を使うか否か。デフォルト false 。
+      hostIPC:     # ホストの IPC 名前空間を使うか否か。デフォルト false 。
       hostNetwork: # Pod に要求されたホストネットワーキング。ホストのネットワーク名前空間を使用。デフォルト false 。
-      hostPID: # ホストの PID 名前空間を利用するか否か。デフォルト false 。
-      hostname: # Pod のホスト名。指定しない場合システムが付与。
+      hostPID:     # ホストの PID 名前空間を利用するか否か。デフォルト false 。
+      hostname:    # Pod のホスト名。指定しない場合システムが付与。
       imagePullSecrets: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#localobjectreference-v1-core
                         # Docker イメージを Pull する際のシークレット。
-      initContainers: # Pod に属する初期化コンテナのリスト。コンテナが開始される前に順番に実行される。
-      nodeName: # Pod を特定のノードへスケジューリングする。
-      nodeSelector: # Pod を配置するノードのセレクタ。
-      overhead: # 特定の RuntimeClass の Pod の実行に関連するリソースオーバーヘッドを表す。コントローラにより自動入力される。
-      preemptionPolicy: # 優先度の低い Pod を先取りするポリシー。
-      priority: # 優先度の値。値が大きいほど優先度が高い。
+      initContainers:    # Pod に属する初期化コンテナのリスト。コンテナが開始される前に順番に実行される。
+      nodeName:          # Pod を特定のノードへスケジューリングする。
+      nodeSelector:      # Pod を配置するノードのセレクタ。
+      overhead:          # 特定の RuntimeClass の Pod の実行に関連するリソースオーバーヘッドを表す。コントローラにより自動入力される。
+      preemptionPolicy:  # 優先度の低い Pod を先取りするポリシー。
+      priority:          # 優先度の値。値が大きいほど優先度が高い。
       priorityClassName: # Pod の優先順位を示す。
       readinessGates: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#podreadinessgate-v1-core
                       # Pod の準備状況を評価する。
-      restartPolicy: # Pod 内の全てのコンテナの再起動ポリシー。
+      restartPolicy:    # Pod 内の全てのコンテナの再起動ポリシー。
       runtimeClassName: # Pod 実行に使用する RuntimeClass オブジェクト。
-      schedulerName: # Pod を管理するスケジューラ。
+      schedulerName:    # Pod を管理するスケジューラ。
       securityContext: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#podsecuritycontext-v1-core
                        # Pod レベルのセキュリティ属性。
-      serviceAccount: # Deprecated
-      serviceAccountName: # Pod の実行に使用する ServiceAccount 名。
-      shareProcessNamespace: # Pod 内の全てのコンテナ間で PID 空間を共有する。デフォルト false 。
-      subdomain: # サブドメインを指定する。"<hostname>.<subdomain>.<pod namespace>.svc.<cluster domain>" 。
-      terminationGracePeriodSeconds: Pod が Graceful Stop するのに要する秒数。デフォルト 30 秒。
+      serviceAccount:                # Deprecated
+      serviceAccountName:            # Pod の実行に使用する ServiceAccount 名。
+      shareProcessNamespace:         # Pod 内の全てのコンテナ間で PID 空間を共有する。デフォルト false 。
+      subdomain:                     # サブドメインを指定する。"<hostname>.<subdomain>.<pod namespace>.svc.<cluster domain>" 。
+      terminationGracePeriodSeconds: # Pod が Graceful Stop するのに要する秒数。デフォルト 30 秒。
       tolerations: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#toleration-v1-core
                    # Pod を特定のノードに配置する際に利用。 nodeSelector の方が古い。
       volumes: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#volume-v1-core
@@ -300,6 +301,12 @@ spec: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#ser
   sessionAffinityConfig:
   type: # ExternalName 、 ClusterIP （デフォルト）、 NodePort 、および LoadBalancer 。
 ```
+
+# 特殊なリソース
+
+基本的なリソース以外に以下について記載する。
+
+- HPA（Horizontal Pod Autoscaling）
 
 # 参考
 
