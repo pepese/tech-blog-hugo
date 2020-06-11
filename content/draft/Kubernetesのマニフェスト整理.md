@@ -307,6 +307,7 @@ spec: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#ser
 基本的なリソース以外に以下について記載する。
 
 - [HPA（HorizontalPodAutoscaler）](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
+- [PBD（PodDisruptionBudget）](https://kubernetes.io/docs/tasks/run-application/configure-pdb/)
 
 ## HPA（HorizontalPodAutoscaler）
 
@@ -333,6 +334,26 @@ spec:
 ```
 
 [参考](https://qiita.com/sheepland/items/37ea0b77df9a4b4c9d80)
+
+## PBD（PodDisruptionBudget）
+
+- `kubectl drain` によって対象 Node から Pod を退去でき、以降も Pod がスケジューリングされないように出来る
+- 注意点として上記だけでは対象 Node 上で起動している Pod は一度に evicted され、一度に退去させられる可能性がある。例えば ReplicaSet 2 で drain 対象の Node に 2つの Pod が起動していた場合、両方の Pod に対して evicted され、一つも Pod が起動していない時間帯がある可能性が出来てしまう
+- PodDisruptionBudget(PDB)を定義することで上記を防ぐことが出来る
+
+```
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: myapp
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+run: myapp
+```
+
+[参考](https://qiita.com/toshihirock/items/5adaece0206127121551)
 
 # 参考
 
