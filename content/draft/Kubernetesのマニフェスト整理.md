@@ -280,6 +280,29 @@ spec:
 - spec.strategy
 - spec.template.spec.affinity : [参考](https://qiita.com/sheepland/items/ed12b3dc4a8f1df7c4ec)
 
+## Pod
+
+```
+apiVersion: core/v1
+kind: Pod
+metadata: # 先の metadata に同じ。
+spec:     # 先の Deployment の spec.template.spec に同じ。
+status:   # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#podstatus-v1-core
+```
+
+### [Pod のライフサイクル](https://kubernetes.io/ja/docs/concepts/workloads/pods/pod-lifecycle/)
+
+`status.phase` は Pod のライフサイクルにおけるフェーズを表しており、 Pod の状態を確認する上で重要となる。
+
+|値|概要|
+|:---|:---|
+|Pending|PodがKubernetesシステムによって承認されが、コンテナイメージの作成が完了していない状態。スケジュールされるまでの時間、イメージダウンロード中の時間などを含む。|
+|Running|PodがNodeにバインドされ、すべてのコンテナが作成された状態。少なくとも1つのコンテナがまだ実行されているか、開始または再起動中。|
+|Succeeded|JobなどのPod内のすべてのコンテナが正常に終了し、再起動も発生していない状態。|
+|Failed|Pod内のすべてのコンテナが終了し、少なくとも1つのコンテナが異常終了した。コンテナはゼロ以外のステータスで終了したか、システムによって終了された。|
+|Unknown|何らかの理由により、通常はPodのホストとの通信にエラーが発生したために、Podの状態を取得できなかった。|
+
+
 ## Service
 
 ```
