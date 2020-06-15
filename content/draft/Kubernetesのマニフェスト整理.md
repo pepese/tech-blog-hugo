@@ -296,12 +296,56 @@ status:   # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/
 
 |値|概要|
 |:---|:---|
-|Pending|PodがKubernetesシステムによって承認されが、コンテナイメージの作成が完了していない状態。スケジュールされるまでの時間、イメージダウンロード中の時間などを含む。|
-|Running|PodがNodeにバインドされ、すべてのコンテナが作成された状態。少なくとも1つのコンテナがまだ実行されているか、開始または再起動中。|
+|Pending|PodがKubernetesシステムによって承認されが、コンテナの作成が完了していない状態。スケジュール・イメージダウンロード中などの状態。|
+|Running|PodがNodeにバインドされ、少なくとも 1 つのコンテナが作成され、開始・実行・再起動中の状態。|
 |Succeeded|JobなどのPod内のすべてのコンテナが正常に終了し、再起動も発生していない状態。|
-|Failed|Pod内のすべてのコンテナが終了し、少なくとも1つのコンテナが異常終了した。コンテナはゼロ以外のステータスで終了したか、システムによって終了された。|
+|Failed|Pod内のすべてのコンテナが終了し、少なくとも1つのコンテナが異常終了した状態。コンテナはゼロ以外のステータスで終了したか、システムによって終了された状態。|
 |Unknown|何らかの理由により、通常はPodのホストとの通信にエラーが発生したために、Podの状態を取得できなかった。|
 
+上記のようなフェーズを決定するために、 Kubernetes では以下の 2 種類の **ヘルスチェック** がある。
+
+- Liveness Probe
+  - Pod が正常に動作しているかの確認
+  - 失敗した場合、 Pod は再起動される
+- Readiness Probe
+  - Pod がサービスインする準備が出来ているかの確認
+  - 失敗した場合、 Pod にトラフィックが流れず、再起動されることもない（サービスインされるまで待つ）
+
+上記の設定はデフォルトではされておらず、通常は Service/LoadBalancer から Node への ICMP による簡易的なチェックしか実施されていない。  
+そのため、 Pod の状態に応じたサービスの健全性を保つために上記の設定が必要になる。  
+Liveness/Readiness Probe の双方で以下の 3 種類のヘルスチェックを設定できる。  
+ヘルスチェックは kubelet からコンテナ毎に行われ、どれか 1 つのコンテナでも失敗した場合には Pod 全体が失敗とみなされる。
+
+- exec
+  - コマンドを実行し、終了コードが 0 でなければ失敗
+  - 例
+  ```
+  livenessProbe:
+    exec:
+      command: ["ls", "/usr/sbin/nginx"]
+  ```
+- httpGet
+  - HTTP GET リクエストを実行し、 Status Code が 200 〜 300 でなければ失敗
+  - 例
+  ```
+  libenessProbe:
+    httpGet:
+      path: /health
+      port: 80
+      scheme: HTTP
+      host: web.example.com
+      httpHeaders:
+      - name: Authorization
+        value: Bearer TOKEN
+  ```
+- tcpSocket
+  - TCP セッションが確立できなければ失敗
+  - 例
+  ```
+  linenessProbe:
+    tcpSocket:
+      port: 80
+  ```
 
 ## Service
 
