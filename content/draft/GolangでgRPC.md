@@ -145,5 +145,6 @@ https://developers.google.com/protocol-buffers/docs/gotutorial
 
 # その他 Tips
 
+- [HTTP/2の特徴 HTTP/1.1との違いについて](https://blog.redbox.ne.jp/http2-cdn.html)
 - [Evans](https://github.com/ktr0731/evans) ： gRPC クライアントツール
 - [gRPC から REST API Server をつくる](https://fisproject.jp/2018/09/translates-grpc-into-rest-json-api-with-go/)
