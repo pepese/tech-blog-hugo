@@ -64,7 +64,6 @@ export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 ```zsh
 export GOENV_DISABLE_GOPATH=1 # これがポイント？
 export PATH="$HOME/.anyenv/bin:$PATH"
-eval "$(anyenv init -)"
 
 export GOPATH=`go env GOPATH`
 export PATH=$PATH:$GOPATH/bin

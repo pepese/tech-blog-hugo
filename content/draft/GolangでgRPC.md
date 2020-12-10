@@ -1,15 +1,18 @@
 ---
 title: GolangでgRPC
+date: 2019-01-03T18:23:48+09:00
 tags:
 - golang
 - go
 - gRPC
 id: golang-grpc
-draft: true
+draft: false
+archives:
+- 2020/12
 ---
 
 [gRPC](https://grpc.io/) は、RPC (Remote Procedure Call) を実現するためにGoogleが開発したプロトコルの1つ。
-[Protocol Buffers](https://developers.google.com/protocol-buffers/) を使ってデータをシリアライズ（異なるプログラミング言語間で XML や JSON といったデータフォーマットを介することなる透過的にデータをやり取り）し、HTTP/2 ベース高速な通信を実現できる。
+[Protocol Buffers](https://developers.google.com/protocol-buffers) を使ってデータをシリアライズ（異なるプログラミング言語間で XML や JSON といったデータフォーマットを介することなる透過的にデータをやり取り）し、HTTP/2 ベース高速な通信を実現できる。
 プログラミング言語に依存しない IDL（インターフェース定義言語）を使ってあらかじめAPI仕様を `.proto` ファイルとして定義し、そこからサーバー側＆クライアント側に必要なソースコードのひな形を生成。
 
 - 環境設定
@@ -26,22 +29,22 @@ draft: true
 $ go get -u google.golang.org/grpc
 $ brew install protobuf                              # protoc コマンドが入る（ここが公式とは異なる）
 $ protoc --version                                   # 必ずバージョンを確認する
-libprotoc 3.7.1
+libprotoc 3.14.0
 $ go get -u github.com/golang/protobuf/protoc-gen-go # go に対応するコードを出力するためのプラグイン
 ```
 
-`$GOPATH/src/google.golang.org/grpc/examples` にサンプルあり。  
+`git clone -b v1.34.0 https://github.com/grpc/grpc-go` でサンプル取得できる。  
 以下 2 つのターミナルで動かしてみる。
 
 ターミナル１：サーバサイド
 ``` bash
-$ cd $GOPATH/src/google.golang.org/grpc/examples/helloworld
+$ cd grpc-go/examples/helloworld
 $ go run greeter_server/main.go
 ```
 
 ターミナル２：クライアントサイド
 ``` bash
-$ cd $GOPATH/src/google.golang.org/grpc/examples/helloworld
+$ cd grpc-go/examples/helloworld
 $ go run greeter_client/main.go
 2019/05/16 16:05:11 Greeting: Hello world
 ```
@@ -49,7 +52,7 @@ $ go run greeter_client/main.go
 `.proto` ファイルからコードを生成してみる。
 
 ``` bash
-$ cd $GOPATH/src/google.golang.org/grpc/examples/helloworld
+$ cd grpc-go/examples/helloworld
 $ protoc -I helloworld/ helloworld/helloworld.proto --go_out=plugins=grpc:helloworld
 # helloworld/helloworld.pb.go が新しく生成され上書きされてる
 ```
@@ -118,7 +121,6 @@ https://developers.google.com/protocol-buffers/docs/overview
 ### .proto 3
 
 - [Language Guide (proto3)](https://developers.google.com/protocol-buffers/docs/proto3)
-- [和訳](https://qiita.com/CyLomw/items/9aa4551bd6bb9c0818b6)
 
 `service` `rpc` `message` `enum` はアッパーキャメルケースで、 `message` のフィールドはスネークケースで、 `enum` のフィールドはコンスタントケースで記載する。
 
