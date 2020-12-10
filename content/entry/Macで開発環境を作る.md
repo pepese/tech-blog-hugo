@@ -1,6 +1,6 @@
 ---
 title: "Macで開発環境を作る"
-date: 2017-05-09T08:06:42+09:00
+date: 2020-12-10T08:06:42+09:00
 slug: "mac-dev-environment"
 tags:
 - homebrew
@@ -104,18 +104,19 @@ Gitの使い方は以下。
 
 - [Git入門](https://blog.pepese.com/entry/git-basics/)
 
-## anyenvをインストール
+## anyenvかasdfをインストール
 
-スクリプト系プログラミング言語のインストール・バージョン管理ができるようになる。  
+プログラミング言語・コマンドラインツールのインストール・バージョン管理ができるようになる。  
 以下を参照。
 
 - [すべての\*\*envを管理するanyenv](https://blog.pepese.com/entry/anyenv/)
-    - Node.js、Python、Rubyの環境構築はこちら参照
-- [公式](https://github.com/riywo/anyenv)
+- [asdfでバージョン管理](https://blog.pepese.com/entry/asdf/)
+    - こっちのがおすすめ
 
 ## SDKMAN をインストール
 
 Java 系ツールのインストール・バージョン管理ができるようになる。  
+anyenv・asdf がお好みでない方はこちら。  
 以下を参照。
 
 - [SDKMAN入門](https://blog.pepese.com/entry/sdkman-basics/)
@@ -123,7 +124,7 @@ Java 系ツールのインストール・バージョン管理ができるよう
 
 ## Javaをインストール
 
-SDKMAN が好みじゃないひとはこっち。
+asdf・SDKMAN が好みじゃないひとはこっち。
 
 ```sh
 $ brew cask install java
@@ -154,7 +155,7 @@ $ rm -rf /Library/Java/JavaVirtualMachines/openjdk-11.0.1.jdk/Contents/Home
 
 ## Mavenをインストール
 
-SDKMAN が好みじゃないひとはこっち。
+asdf・SDKMAN が好みじゃないひとはこっち。
 
 ```sh
 $ brew search maven

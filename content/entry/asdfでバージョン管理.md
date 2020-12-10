@@ -79,6 +79,8 @@ helm
 % asdf list-all helm
 3.4.1
 
+% asdf install helm 3.4.1
+
 % asdf global helm 3.4.1
 
 % asdf current helm
