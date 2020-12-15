@@ -1,6 +1,6 @@
 ---
 title: "Macで開発環境を作る"
-date: 2020-12-10T08:06:42+09:00
+date: 2017-05-10T08:06:42+09:00
 slug: "mac-dev-environment"
 tags:
 - homebrew

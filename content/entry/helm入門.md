@@ -5,7 +5,7 @@ slog: k8s-helm-basics
 tags:
 - kubernetes
 - helm
-draft: true
+draft: false
 archives:
 - 2019/05
 ---

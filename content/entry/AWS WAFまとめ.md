@@ -5,7 +5,7 @@ slug: "aws-waf-basics"
 tags:
 - aws
 - waf
-draft: true
+draft: false
 archives:
 - 2019/08
 ---
