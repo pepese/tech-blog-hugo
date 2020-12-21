@@ -1,13 +1,13 @@
 ---
 title: "gRPC/Protocol Buffers入門"
-date: 2020-12-10T15:14:28+09:00
+date: 2020-01-03T18:23:48+09:00
 slug: "grpc-protocolbuffers-basics"
 tags:
 - gRPC
 - Protocol Buffers
 draft: false
 archives:
-- 2020/12
+- 2020/01
 ---
 
 今更ながら [gRPC](https://grpc.io/)/[Protocol Buffers](https://developers.google.com/protocol-buffers) に入門する。

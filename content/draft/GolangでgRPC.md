@@ -8,7 +8,7 @@ tags:
 id: golang-grpc
 draft: false
 archives:
-- 2020/12
+- 2019/01
 ---
 
 [gRPC](https://grpc.io/) は、RPC (Remote Procedure Call) を実現するためにGoogleが開発したプロトコルの1つ。
