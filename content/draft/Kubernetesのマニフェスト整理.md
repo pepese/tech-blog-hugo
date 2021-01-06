@@ -256,21 +256,23 @@ kind: Deployment
 metadata:
   annotations:
     <key>: <value>
-  labels:
+  labels:                  # Deployment の Label
     <key>: <value>
-  name: <string>
-  namespace: <string>
+  name: <string>           # Deployment 名
+  namespace: <string>      # Deployment の namespace
 spec:
-  replicas: <integer>
+  replicas: <integer>      # ReplicaSet のレプリカ数。
   selector:
     matchLabels:
-      <key>: <value>
-  template:
+      <key1>: <value1>     # ReplicaSet の対象セレクタ。以下の Pod 定義 の Label に一致させる。
+  template:                # Pod 定義
     metadata:
+      labels:              # Pod の Label
+        <key1>: <value1>
     spec:
       containers:
-        image: <string>
-        name: <string>
+        image: <string>    # Pod に利用するコンテナイメージ
+        name: <string>     # Pod 名
         ports:
         resources: {}
 ```
@@ -353,7 +355,7 @@ Liveness/Readiness Probe の双方で以下の 3 種類のヘルスチェック�
 apiVersion: v1
 kind: Service
 metadata: # 先の metadata に同じ。
-spec: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#servicespec-v1-core
+spec: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#servicespec-v1-core
   clusterIP:
   externalIPs:
   externalName:
@@ -367,6 +369,27 @@ spec: # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#ser
   sessionAffinity:
   sessionAffinityConfig:
   type: # ExternalName 、 ClusterIP （デフォルト）、 NodePort 、および LoadBalancer 。
+```
+
+色々設定があるが、 ClusterIP の場合は以下くらいでいい。
+
+```
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    <key>: <value>
+  labels:             # Service の Label
+    <key>: <value>
+  name: <string>      # Service 名
+  namespace: <string> # Service の namespace
+spec:
+  selector:
+    <key>: <value>    # 通信を流す Pod の Label をセレクタで指定
+  ports:
+  - protocol: TCP     # Service が受信するプロトコルとポートマッピング
+    port: 80          # Service が受信 Port
+    targetPort: 9376  # Pod の Port
 ```
 
 # その他のリソース
