@@ -245,6 +245,8 @@ Helm から構築する Istio は、 Istio では飽き足らず、様々な機�
 
 設定については [ここ](https://istio.io/docs/reference/config/installation-options/) を参照。
 
+<img src="https://image.itmedia.co.jp/ait/articles/2012/02/news012_datastack.jpg">
+
 ## ちょっと設定見てみる
 
 ```bash
