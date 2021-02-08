@@ -52,3 +52,8 @@ archives:
 - Prometheus や Alertmanager の実行も管理もしてくれる
 
 つまり、 Kubernetes のマニフェストファイルを利用して Prometheus や Alertmanager の設定・定義を可能にしてくれるもの。
+
+# [Prometheus Monitoring Mixins](https://monitoring.mixins.dev/)
+
+- Grafanaのダッシュボード、Prometheusのルール・アラートを再利用可能な形でまとめたもの
+- [jsonnet](https://jsonnet.org/) で記載されていて[jsonnet-bundler](https://github.com/jsonnet-bundler/jsonnet-bundler)でインストール・更新可能
